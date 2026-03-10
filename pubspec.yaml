@@ -1,0 +1,64 @@
+name: starmotor
+description: Starmotor - Chinese Automotive Lifestyle Mobile App
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
+
+  # HTTP & networking
+  http: ^1.2.0
+
+  # Local storage
+  shared_preferences: ^2.2.2
+
+  # UI
+  cupertino_icons: ^1.0.6
+  cached_network_image: ^3.3.1
+  flutter_svg: ^2.0.9
+
+  # Navigation
+  go_router: ^13.2.0
+
+  # JSON serialization
+  json_annotation: ^4.8.1
+
+  # Utilities
+  intl: ^0.19.0
+  url_launcher: ^6.2.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+  # Code generation
+  build_runner: ^2.4.8
+  json_serializable: ^6.7.1
+  riverpod_generator: ^2.3.9
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+
+  # fonts:
+  #   - family: PingFang
+  #     fonts:
+  #       - asset: assets/fonts/PingFangSC-Regular.ttf
+  #         weight: 400
+  #       - asset: assets/fonts/PingFangSC-Medium.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/PingFangSC-Semibold.ttf
+  #         weight: 600
