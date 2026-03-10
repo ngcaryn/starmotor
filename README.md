@@ -4,6 +4,42 @@ A comprehensive **Chinese automotive lifestyle mobile app** built with Flutter, 
 
 ---
 
+## 👀 View the App
+
+### Option 1 — Interactive HTML Preview (No setup required)
+
+Open [`preview/index.html`](preview/index.html) directly in any modern web browser:
+
+```bash
+# macOS
+open preview/index.html
+
+# Windows
+start preview/index.html
+
+# Linux
+xdg-open preview/index.html
+```
+
+All **8 screens** are interactive — use the navigation buttons or the bottom tab bar inside the phone frame to switch between them.
+
+> **Preview screenshot:**
+>
+> ![Starmotor App Preview](https://github.com/user-attachments/assets/d08bd989-6387-4bf5-8acc-62ae2dbfa6cb)
+
+---
+
+### Option 2 — Run the Real Flutter App
+
+See the [Getting Started](#-getting-started) section below for full instructions.
+
+```bash
+flutter pub get
+flutter run          # on a connected device or emulator
+```
+
+---
+
 ## 📱 App Features (7 Main Tabs)
 
 | Tab | Icon | Description |

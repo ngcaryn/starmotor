@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starmotor 星驰汽车 – App Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── Root variables from theme_config.dart ──────────────────────────── */
+:root {
+  --primary:    #1A1A2E;
+  --primaryL:   #16213E;
+  --accent:     #E94560;
+  --accentL:    #FF6B6B;
+  --success:    #4CAF50;
+  --info:       #2196F3;
+  --warning:    #FF9800;
+  --error:      #F44336;
+  --grey100:    #F5F5F5;
+  --grey200:    #EEEEEE;
+  --grey300:    #E0E0E0;
+  --grey500:    #9E9E9E;
+  --grey700:    #616161;
+  --grey900:    #212121;
+  --white:      #FFFFFF;
+  --social:     #6C63FF;
+  --publication:#00BCD4;
+  --explore:    #FF9800;
+  --mall:       #4CAF50;
+  --service:    #9C27B0;
+  --profile:    #607D8B;
+  --font: 'Noto Sans SC', 'Inter', sans-serif;
+}
+
+/* ─── Page layout ────────────────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3e 50%, #0f1a2e 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 32px 16px 48px;
+  color: var(--grey900);
+}
+
+/* ─── Page header ────────────────────────────────────────────────────── */
+.page-header {
+  text-align: center;
+  margin-bottom: 36px;
+  color: #fff;
+}
+.page-header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.page-header h1 span { color: var(--accent); }
+.page-header p {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.6);
+}
+.page-header .badges {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+  margin-top: 14px;
+}
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* ─── Phone chrome ───────────────────────────────────────────────────── */
+.phone-wrap {
+  position: relative;
+  display: inline-block;
+}
+.phone-frame {
+  width: 375px;
+  height: 760px;
+  background: #1a1a2e;
+  border-radius: 50px;
+  padding: 16px 8px;
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,.12),
+    0 0 0 6px rgba(255,255,255,.04),
+    0 40px 80px rgba(0,0,0,.6),
+    0 4px 20px rgba(233,69,96,.25);
+  position: relative;
+}
+.phone-notch {
+  width: 120px; height: 28px;
+  background: #0a0a18;
+  border-radius: 0 0 16px 16px;
+  margin: 0 auto 4px;
+  position: relative;
+  z-index: 10;
+}
+.phone-screen {
+  width: 100%;
+  height: calc(100% - 32px);
+  background: var(--grey100);
+  border-radius: 38px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Status bar ─────────────────────────────────────────────────────── */
+.status-bar {
+  height: 28px;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  flex-shrink: 0;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ─── App bar ────────────────────────────────────────────────────────── */
+.app-bar {
+  background: var(--primary);
+  color: #fff;
+  padding: 0 16px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.app-bar .title { font-size: 17px; font-weight: 600; }
+.app-bar .actions { display: flex; gap: 8px; }
+.app-bar .icon-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: #fff;
+  border: none;
+}
+
+/* ─── Screen content ─────────────────────────────────────────────────── */
+.screen-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  background: var(--grey100);
+}
+.screen-content::-webkit-scrollbar { display: none; }
+
+/* ─── Tab bar (bottom navigation) ──────────────────────────────────── */
+.tab-bar {
+  height: 64px;
+  background: var(--white);
+  border-top: 1px solid var(--grey200);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 -4px 12px rgba(0,0,0,.06);
+}
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  padding: 8px 0;
+  border: none;
+  background: none;
+  transition: all .15s;
+  font-family: var(--font);
+  position: relative;
+}
+.tab-item .tab-icon { font-size: 20px; line-height: 1; }
+.tab-item .tab-label { font-size: 9.5px; font-weight: 500; color: var(--grey500); }
+.tab-item.active .tab-label { color: var(--primary); font-weight: 700; }
+.cart-badge {
+  position: absolute;
+  top: 4px;
+  right: calc(50% - 22px);
+  background: var(--accent);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 700;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ─── Screen switcher ────────────────────────────────────────────────── */
+.screen { display: none; height: 100%; }
+.screen.active { display: block; height: 100%; overflow-y: auto; }
+.screen.active::-webkit-scrollbar { display: none; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   SCREEN STYLES
+══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Cards ──────────────────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  overflow: hidden;
+}
+
+/* ─── Post card ──────────────────────────────────────────────────────── */
+.post-card {
+  background: var(--white);
+  margin-bottom: 8px;
+  padding: 14px 16px;
+}
+.post-card .author-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 14px;
+  flex-shrink: 0;
+}
+.avatar.official { background: linear-gradient(135deg, #1A1A2E, #E94560); }
+.author-info .name { font-size: 13px; font-weight: 600; }
+.author-info .time { font-size: 11px; color: var(--grey500); }
+.post-content { font-size: 13px; line-height: 1.55; color: var(--grey900); margin-bottom: 10px; }
+.post-images { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; border-radius: 8px; overflow: hidden; margin-bottom: 10px; }
+.post-images img { width: 100%; height: 90px; object-fit: cover; background: var(--grey200); }
+.post-images.single img { grid-column: 1/-1; height: 160px; }
+.tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.tag { font-size: 11px; color: var(--info); }
+.post-actions { display: flex; gap: 18px; padding-top: 10px; border-top: 1px solid var(--grey200); }
+.action { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--grey500); cursor: pointer; }
+.action.liked { color: var(--accent); }
+.verified-badge { color: var(--primary); font-size: 11px; }
+
+/* ─── Section header ─────────────────────────────────────────────────── */
+.section-header {
+  padding: 16px 16px 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--grey900);
+  background: var(--grey100);
+}
+
+/* ─── Pill tabs ──────────────────────────────────────────────────────── */
+.pill-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--grey100);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.pill-tabs::-webkit-scrollbar { display: none; }
+.pill {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid var(--grey300);
+  background: var(--white);
+  color: var(--grey700);
+  transition: all .15s;
+}
+.pill.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ─── Car card ───────────────────────────────────────────────────────── */
+.car-card {
+  background: var(--white);
+  border-radius: 16px;
+  margin: 8px 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+.car-card .car-image {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.car-image-placeholder {
+  width: 100%; height: 170px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d2d5e 50%, #16213e 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 56px;
+  position: relative;
+}
+.car-image-placeholder::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 40%;
+  background: linear-gradient(to top, rgba(0,0,0,.3), transparent);
+}
+.fuel-badge {
+  position: absolute;
+  top: 10px; left: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+}
+.fuel-badge.electric { background: var(--success); }
+.fuel-badge.hybrid { background: var(--info); }
+.car-info { padding: 14px; }
+.car-name { font-size: 18px; font-weight: 700; }
+.car-name-en { font-size: 12px; color: var(--grey500); margin-top: 1px; }
+.car-price { font-size: 16px; font-weight: 700; color: var(--accent); }
+.car-highlights { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+.highlight { padding: 3px 8px; border-radius: 4px; font-size: 11px; color: var(--primary); background: rgba(26,26,46,.08); }
+.car-buttons { display: flex; gap: 10px; margin-top: 12px; }
+.btn { padding: 9px 0; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; flex: 1; border: none; font-family: var(--font); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+
+/* ─── Product card ───────────────────────────────────────────────────── */
+.product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 12px 12px; }
+.product-card { background: var(--white); border-radius: 12px; overflow: hidden; }
+.product-img { width: 100%; height: 120px; object-fit: cover; background: var(--grey200); position: relative; }
+.product-img-placeholder { width: 100%; height: 120px; background: linear-gradient(135deg, var(--grey200), var(--grey300)); display: flex; align-items: center; justify-content: center; font-size: 36px; }
+.sale-badge { position: absolute; top: 6px; left: 6px; background: var(--accent); color: #fff; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 3px; }
+.product-info { padding: 9px 10px; }
+.product-name { font-size: 12px; font-weight: 500; line-height: 1.4; margin-bottom: 4px; }
+.product-rating { display: flex; align-items: center; gap: 2px; font-size: 10px; color: var(--grey500); margin-bottom: 5px; }
+.star { color: #FFC107; font-size: 10px; }
+.product-price-row { display: flex; align-items: center; justify-content: space-between; }
+.product-price { font-size: 14px; font-weight: 700; color: var(--accent); }
+.product-orig { font-size: 10px; color: var(--grey500); text-decoration: line-through; }
+.add-btn { width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
+
+/* ─── Service card ───────────────────────────────────────────────────── */
+.service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 16px 12px; }
+.service-card { background: var(--white); border-radius: 12px; padding: 16px; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+.service-icon { font-size: 26px; margin-bottom: 8px; }
+.service-title { font-size: 13px; font-weight: 600; color: var(--grey900); }
+.service-sub { font-size: 11px; color: var(--grey500); margin-top: 2px; line-height: 1.3; }
+
+/* ─── Profile ────────────────────────────────────────────────────────── */
+.profile-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primaryL) 100%);
+  padding: 20px 16px;
+  color: #fff;
+}
+.profile-row { display: flex; align-items: flex-end; gap: 14px; }
+.profile-avatar { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; border: 2px solid rgba(255,255,255,.4); }
+.profile-name { font-size: 20px; font-weight: 700; }
+.profile-phone { font-size: 12px; color: rgba(255,255,255,.65); margin-top: 2px; }
+.stats-row { display: flex; gap: 24px; margin-top: 14px; }
+.stat { text-align: center; }
+.stat-num { font-size: 18px; font-weight: 700; }
+.stat-lbl { font-size: 11px; color: rgba(255,255,255,.65); margin-top: 1px; }
+.menu-section { background: var(--white); border-radius: 12px; margin: 12px 16px 0; box-shadow: 0 1px 6px rgba(0,0,0,.04); }
+.menu-item { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-bottom: 1px solid var(--grey100); cursor: pointer; }
+.menu-item:last-child { border-bottom: none; }
+.menu-icon-wrap { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.menu-text { flex: 1; font-size: 14px; font-weight: 500; }
+.menu-arrow { color: var(--grey300); font-size: 16px; }
+.order-row { display: flex; justify-content: space-around; padding: 12px 0; }
+.order-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+.order-item-icon { font-size: 22px; }
+.order-item-label { font-size: 10px; color: var(--grey500); }
+
+/* ─── Brand explore ──────────────────────────────────────────────────── */
+.brand-hero {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, var(--primary) 0%, #2a2a5e 50%, var(--primaryL) 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.brand-hero::before {
+  content: '🚗';
+  position: absolute;
+  font-size: 100px;
+  opacity: .08;
+  transform: rotate(-15deg);
+  right: -10px; top: 10px;
+}
+.brand-hero h2 { font-size: 22px; font-weight: 700; }
+.brand-hero p { font-size: 13px; color: rgba(255,255,255,.75); margin-top: 4px; }
+.milestone-item { display: flex; gap: 12px; padding: 10px 16px; align-items: flex-start; }
+.milestone-year { background: var(--primary); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 6px; border-radius: 4px; white-space: nowrap; }
+.milestone-text { font-size: 13px; color: var(--grey700); line-height: 1.5; }
+.event-card { background: var(--white); border-radius: 12px; margin: 0 16px 12px; overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+.event-card .event-img { width: 100%; height: 120px; background: linear-gradient(135deg, var(--explore), #f5a623); display: flex; align-items: center; justify-content: center; font-size: 36px; }
+.event-card .event-info { padding: 12px 14px; }
+.event-card .event-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.event-meta { display: flex; gap: 14px; font-size: 11px; color: var(--grey500); }
+
+/* ─── Publication ────────────────────────────────────────────────────── */
+.pub-card {
+  background: var(--white);
+  margin: 0 0 8px;
+  overflow: hidden;
+}
+.pub-card .pub-img { width: 100%; height: 150px; background: linear-gradient(135deg, var(--primaryL) 0%, #2a3060 100%); display: flex; align-items: center; justify-content: center; font-size: 48px; }
+.pub-card .pub-body { padding: 12px 16px; }
+.pub-card .official-tag { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--primary); font-weight: 600; margin-bottom: 6px; }
+.pub-card .pub-text { font-size: 13px; line-height: 1.6; color: var(--grey700); }
+.pub-card .pub-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--grey200); }
+.pub-card .pub-stats { display: flex; gap: 14px; font-size: 11px; color: var(--grey500); }
+
+/* ─── Banner ─────────────────────────────────────────────────────────── */
+.mall-banner {
+  margin: 8px 16px;
+  height: 150px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primaryL) 100%);
+  border-radius: 14px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: #fff;
+}
+.mall-banner h3 { font-size: 20px; font-weight: 700; }
+.mall-banner p { font-size: 12px; color: rgba(255,255,255,.7); margin-top: 4px; }
+
+/* ─── Category strip ─────────────────────────────────────────────────── */
+.cat-strip { display: flex; gap: 0; padding: 10px 12px; background: var(--white); overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--grey200); }
+.cat-strip::-webkit-scrollbar { display: none; }
+.cat-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 8px; cursor: pointer; }
+.cat-icon-wrap { width: 44px; height: 44px; border-radius: 12px; background: rgba(26,26,46,.08); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.cat-label { font-size: 10px; color: var(--grey700); white-space: nowrap; }
+
+/* ─── Emergency banner ────────────────────────────────────────────────── */
+.emergency-banner {
+  margin: 12px 16px 0;
+  padding: 14px 16px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primaryL) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+}
+.emergency-icon { font-size: 28px; }
+.emergency-info .title { font-size: 14px; font-weight: 600; }
+.emergency-info .num { font-size: 12px; color: rgba(255,255,255,.65); }
+.emergency-call {
+  margin-left: auto;
+  background: #fff;
+  color: var(--primary);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+}
+
+/* ─── Auth screen ────────────────────────────────────────────────────── */
+.auth-screen {
+  background: var(--white);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 24px 24px;
+}
+.auth-logo { width: 72px; height: 72px; background: var(--primary); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 38px; margin-bottom: 12px; }
+.auth-title { font-size: 22px; font-weight: 700; color: var(--primary); }
+.auth-subtitle { font-size: 13px; color: var(--grey500); margin-bottom: 28px; }
+.input-group { width: 100%; margin-bottom: 14px; }
+.input-label { font-size: 12px; color: var(--grey700); margin-bottom: 5px; }
+.input-field { width: 100%; border: 1.5px solid var(--grey300); border-radius: 8px; padding: 12px 14px; font-size: 14px; font-family: var(--font); background: var(--grey100); outline: none; }
+.input-field:focus { border-color: var(--primary); }
+.btn-full { width: 100%; padding: 13px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; margin-top: 6px; font-family: var(--font); }
+.btn-full.primary { background: var(--primary); color: #fff; }
+.tab-switcher { display: flex; width: 100%; border-bottom: 2px solid var(--grey200); margin-bottom: 20px; }
+.tab-switch { flex: 1; padding: 10px; text-align: center; font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; color: var(--grey500); }
+.tab-switch.active { border-bottom-color: var(--primary); color: var(--primary); font-weight: 700; }
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────── */
+.screen::-webkit-scrollbar { display: none; }
+
+/* ─── Responsive wrapper ─────────────────────────────────────────────── */
+.demo-wrapper {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+.phone-col { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+
+/* ─── Screen selector buttons ────────────────────────────────────────── */
+.screen-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 220px;
+}
+.screen-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.7);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all .2s;
+  font-family: var(--font);
+  text-align: left;
+}
+.screen-nav-btn:hover { background: rgba(255,255,255,.12); }
+.screen-nav-btn.active {
+  background: rgba(233,69,96,.18);
+  border-color: var(--accent);
+  color: #fff;
+}
+.screen-nav-btn .nav-icon { font-size: 18px; width: 22px; text-align: center; }
+.screen-nav-btn .nav-label { flex: 1; }
+.screen-nav-btn .nav-cn { font-size: 11px; opacity: .65; margin-left: 4px; }
+
+.nav-section-title {
+  color: rgba(255,255,255,.4);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  padding: 4px 2px;
+  margin-top: 4px;
+}
+.setup-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: 20px;
+  color: rgba(255,255,255,.85);
+  width: 220px;
+  margin-top: 8px;
+}
+.setup-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #fff; }
+.setup-step { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+.step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-text { font-size: 12px; line-height: 1.5; }
+.step-code { background: rgba(0,0,0,.3); border-radius: 4px; padding: 2px 6px; font-family: monospace; font-size: 11px; color: #7dd3fc; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Starmotor <span>星驰汽车</span></h1>
+  <p>Interactive App Preview · Flutter Mobile Application</p>
+  <div class="badges">
+    <span class="badge">Flutter 3.x</span>
+    <span class="badge">Riverpod</span>
+    <span class="badge">Material 3</span>
+    <span class="badge">8 Screens</span>
+    <span class="badge">iOS + Android</span>
+  </div>
+</div>
+
+<div class="demo-wrapper">
+
+  <!-- Left: screen selector + setup info -->
+  <div class="screen-nav" id="screenNav">
+    <div class="nav-section-title">App Screens</div>
+
+    <button class="screen-nav-btn" data-screen="login" onclick="switchScreenBtn(this,'login')">
+      <span class="nav-icon">🔐</span>
+      <span class="nav-label">Login <span class="nav-cn">登录</span></span>
+    </button>
+    <button class="screen-nav-btn active" data-screen="social" onclick="switchScreenBtn(this,'social')">
+      <span class="nav-icon">👥</span>
+      <span class="nav-label">Social <span class="nav-cn">社区</span></span>
+    </button>
+    <button class="screen-nav-btn" data-screen="publication" onclick="switchScreenBtn(this,'publication')">
+      <span class="nav-icon">📰</span>
+      <span class="nav-label">Publication <span class="nav-cn">发布</span></span>
+    </button>
+    <button class="screen-nav-btn" data-screen="purchase" onclick="switchScreenBtn(this,'purchase')">
+      <span class="nav-icon">🚗</span>
+      <span class="nav-label">Purchase <span class="nav-cn">购车</span></span>
+    </button>
+    <button class="screen-nav-btn" data-screen="explore" onclick="switchScreenBtn(this,'explore')">
+      <span class="nav-icon">🌟</span>
+      <span class="nav-label">Explore <span class="nav-cn">探索</span></span>
+    </button>
+    <button class="screen-nav-btn" data-screen="mall" onclick="switchScreenBtn(this,'mall')">
+      <span class="nav-icon">🛍️</span>
+      <span class="nav-label">Mall <span class="nav-cn">商城</span></span>
+    </button>
+    <button class="screen-nav-btn" data-screen="service" onclick="switchScreenBtn(this,'service')">
+      <span class="nav-icon">🔧</span>
+      <span class="nav-label">Service <span class="nav-cn">服务</span></span>
+    </button>
+    <button class="screen-nav-btn" data-screen="profile" onclick="switchScreenBtn(this,'profile')">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Profile <span class="nav-cn">我的</span></span>
+    </button>
+
+    <div class="setup-card">
+      <h3>🚀 Run the App</h3>
+      <div class="setup-step">
+        <span class="step-num">1</span>
+        <span class="step-text">Install Flutter SDK from <span class="step-code">flutter.dev</span></span>
+      </div>
+      <div class="setup-step">
+        <span class="step-num">2</span>
+        <span class="step-text"><span class="step-code">flutter pub get</span></span>
+      </div>
+      <div class="setup-step">
+        <span class="step-num">3</span>
+        <span class="step-text"><span class="step-code">flutter run</span> on device or emulator</span>
+      </div>
+      <div class="setup-step">
+        <span class="step-num">4</span>
+        <span class="step-text">Or build web: <span class="step-code">flutter build web</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Center: phone mockup -->
+  <div class="phone-col">
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+
+          <!-- Status bar -->
+          <div class="status-bar" id="statusBar">
+            <span>9:41</span>
+            <span>Starmotor</span>
+            <span>📶 🔋</span>
+          </div>
+
+          <!-- App bar -->
+          <div class="app-bar" id="appBar">
+            <span></span>
+            <span class="title" id="appBarTitle">社区</span>
+            <div class="actions">
+              <button class="icon-btn">🔍</button>
+            </div>
+          </div>
+
+          <!-- Screen content area -->
+          <div class="screen-content" id="screenContent">
+
+            <!-- ═══ LOGIN SCREEN ════════════════════════════════════════ -->
+            <div class="screen" id="screen-login">
+              <div class="auth-screen">
+                <div class="auth-logo">🚗</div>
+                <div class="auth-title">Starmotor</div>
+                <div class="auth-subtitle">星驰汽车 · 智能出行</div>
+                <div class="tab-switcher" style="width:100%;max-width:340px;">
+                  <div class="tab-switch active">手机号登录</div>
+                  <div class="tab-switch">邮箱登录</div>
+                </div>
+                <div style="width:100%;max-width:340px;">
+                  <div class="input-group">
+                    <div class="input-label">手机号</div>
+                    <div style="display:flex;gap:8px;">
+                      <input class="input-field" placeholder="请输入手机号" style="flex:1;" value="138****8888" readonly>
+                      <button class="btn btn-outline" style="white-space:nowrap;padding:0 10px;font-size:12px;border-radius:8px;">获取验证码</button>
+                    </div>
+                  </div>
+                  <div class="input-group">
+                    <div class="input-label">验证码</div>
+                    <input class="input-field" placeholder="请输入6位验证码" value="123456" readonly>
+                  </div>
+                  <button class="btn-full primary" style="margin-top:12px;" onclick="switchScreen('social')">登 录</button>
+                  <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--grey500);">
+                    还没有账号？<span style="color:var(--primary);font-weight:600;cursor:pointer;" onclick="switchScreen('social')">立即注册</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ═══ SOCIAL FEED SCREEN ══════════════════════════════════ -->
+            <div class="screen active" id="screen-social">
+              <!-- Post 1 -->
+              <div class="post-card">
+                <div class="author-row">
+                  <div class="avatar">王</div>
+                  <div class="author-info">
+                    <div class="name">星驰车主小王</div>
+                    <div class="time">2小时前</div>
+                  </div>
+                  <span style="margin-left:auto;font-size:18px;color:var(--grey500);">⋯</span>
+                </div>
+                <div class="post-content">刚刚提车了！全新星驰S7真的太香了，续航620公里，动力十足！#星驰 #新能源 #提车日记 🎉</div>
+                <div class="post-images">
+                  <div style="background:linear-gradient(135deg,#1a1a2e,#2d3a8c);height:90px;display:flex;align-items:center;justify-content:center;font-size:28px;">🚗</div>
+                  <div style="background:linear-gradient(135deg,#16213e,#1a3060);height:90px;display:flex;align-items:center;justify-content:center;font-size:28px;">🏁</div>
+                </div>
+                <div class="tag-row">
+                  <span class="tag">#星驰</span>
+                  <span class="tag">#新能源</span>
+                  <span class="tag">#提车日记</span>
+                </div>
+                <div class="post-actions">
+                  <div class="action liked" onclick="this.classList.toggle('liked')">❤️ 128</div>
+                  <div class="action">💬 34</div>
+                  <div class="action">↗️ 12</div>
+                </div>
+              </div>
+
+              <!-- Post 2 -->
+              <div class="post-card">
+                <div class="author-row">
+                  <div class="avatar" style="background:linear-gradient(135deg,#6c63ff,#a855f7);">李</div>
+                  <div class="author-info">
+                    <div class="name">汽车爱好者老李</div>
+                    <div class="time">5小时前</div>
+                  </div>
+                  <span style="margin-left:auto;font-size:18px;color:var(--grey500);">⋯</span>
+                </div>
+                <div class="post-content">分享一下星驰的驾驶体验，悬挂调校非常舒适，噪音控制做得很好。城市通勤完全够用！长途高速体验也相当不错，强烈推荐！</div>
+                <div class="tag-row">
+                  <span class="tag">#驾驶体验</span>
+                  <span class="tag">#星驰S7</span>
+                </div>
+                <div class="post-actions">
+                  <div class="action" onclick="this.classList.toggle('liked')">🤍 86</div>
+                  <div class="action">💬 22</div>
+                  <div class="action">↗️ 8</div>
+                </div>
+              </div>
+
+              <!-- Post 3 -->
+              <div class="post-card">
+                <div class="author-row">
+                  <div class="avatar official">官</div>
+                  <div class="author-info">
+                    <div class="name" style="display:flex;align-items:center;gap:4px;">星驰官方 <span class="verified-badge">✅</span></div>
+                    <div class="time">1天前</div>
+                  </div>
+                  <span style="margin-left:auto;font-size:18px;color:var(--grey500);">⋯</span>
+                </div>
+                <div class="post-content">【星驰X9正式开启预售】旗舰6座豪华SUV，增程续航1200km，4月正式交付！限时优惠开启中🎊</div>
+                <div style="background:linear-gradient(135deg,#1A1A2E,#2a3060);height:130px;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;gap:6px;">
+                  <span style="font-size:40px;">🚙</span>
+                  <span style="font-size:13px;font-weight:600;">星驰X9 旗舰SUV</span>
+                  <span style="font-size:11px;color:rgba(255,255,255,.65);">增程·6座·1200km</span>
+                </div>
+                <div class="post-actions">
+                  <div class="action liked">❤️ 5,632</div>
+                  <div class="action">💬 789</div>
+                  <div class="action">↗️ 431</div>
+                </div>
+              </div>
+
+              <div style="height:16px;"></div>
+            </div>
+
+            <!-- ═══ PUBLICATION SCREEN ══════════════════════════════════ -->
+            <div class="screen" id="screen-publication">
+              <div style="display:flex;border-bottom:1px solid var(--grey200);background:var(--white);">
+                <div style="flex:1;padding:12px 0;text-align:center;font-size:13px;font-weight:700;color:var(--primary);border-bottom:2px solid var(--primary);">全部</div>
+                <div style="flex:1;padding:12px 0;text-align:center;font-size:13px;color:var(--grey500);">新闻</div>
+                <div style="flex:1;padding:12px 0;text-align:center;font-size:13px;color:var(--grey500);">活动</div>
+              </div>
+
+              <div class="pub-card">
+                <div class="pub-img">📢</div>
+                <div class="pub-body">
+                  <div class="official-tag">✅ 星驰官方 · 3小时前</div>
+                  <div class="pub-text">【重磅发布】星驰S7正式上市！续航620km，配备最新L2+智能辅助驾驶系统，现已开启全国预订。售价29.8万起，限时权益不容错过！</div>
+                  <div class="pub-footer">
+                    <div class="pub-stats">
+                      <span>❤️ 3,248</span>
+                      <span>💬 512</span>
+                    </div>
+                    <span style="font-size:12px;color:var(--grey500);">查看详情 ›</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pub-card">
+                <div class="pub-img" style="background:linear-gradient(135deg,#ff9800,#f57c00);">🎪</div>
+                <div class="pub-body">
+                  <div class="official-tag">✅ 星驰官方 · 1天前</div>
+                  <div class="pub-text">【活动预告】2024星驰品牌体验日即将开启！全国18个城市同步举办，欢迎莅临体验最新车型，现场礼品相送！</div>
+                  <div class="pub-footer">
+                    <div class="pub-stats">
+                      <span>❤️ 1,876</span>
+                      <span>💬 234</span>
+                    </div>
+                    <span style="font-size:12px;color:var(--grey500);">查看详情 ›</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pub-card">
+                <div class="pub-img" style="background:linear-gradient(135deg,#4caf50,#2e7d32);">🏆</div>
+                <div class="pub-body">
+                  <div class="official-tag">✅ 星驰官方 · 3天前</div>
+                  <div class="pub-text">星驰荣获2024年度最佳新能源汽车品牌大奖，感谢每一位星驰车主的支持与信任！</div>
+                  <div class="pub-footer">
+                    <div class="pub-stats">
+                      <span>❤️ 5,632</span>
+                      <span>💬 789</span>
+                    </div>
+                    <span style="font-size:12px;color:var(--grey500);">查看详情 ›</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ═══ PURCHASE SCREEN ═════════════════════════════════════ -->
+            <div class="screen" id="screen-purchase">
+              <div class="pill-tabs">
+                <div class="pill active">全部</div>
+                <div class="pill">纯电动</div>
+                <div class="pill">插电混动</div>
+                <div class="pill">SUV</div>
+                <div class="pill">30万以下</div>
+              </div>
+
+              <!-- Car 1 -->
+              <div class="car-card">
+                <div class="car-image-placeholder">
+                  🚗
+                  <div class="fuel-badge electric" style="position:absolute;top:10px;left:10px;">纯电动</div>
+                </div>
+                <div class="car-info">
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                    <div>
+                      <div class="car-name">星驰S7</div>
+                      <div class="car-name-en">Starmotor S7</div>
+                    </div>
+                    <div>
+                      <div class="car-price">¥29.8万起</div>
+                    </div>
+                  </div>
+                  <div class="car-highlights">
+                    <span class="highlight">620km续航</span>
+                    <span class="highlight">零百4.2秒</span>
+                    <span class="highlight">L2+辅助驾驶</span>
+                  </div>
+                  <div class="car-buttons">
+                    <button class="btn btn-outline">预约试驾</button>
+                    <button class="btn btn-primary" onclick="alert('查看详情: 星驰S7')">查看详情</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Car 2 -->
+              <div class="car-card">
+                <div class="car-image-placeholder" style="background:linear-gradient(135deg,#16213e,#0f3460);">
+                  🚙
+                  <div class="fuel-badge hybrid" style="position:absolute;top:10px;left:10px;">插电混动</div>
+                </div>
+                <div class="car-info">
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                    <div>
+                      <div class="car-name">星驰X9</div>
+                      <div class="car-name-en">Starmotor X9</div>
+                    </div>
+                    <div>
+                      <div class="car-price">¥42.8万起</div>
+                    </div>
+                  </div>
+                  <div class="car-highlights">
+                    <span class="highlight">1200km综合</span>
+                    <span class="highlight">6座旗舰</span>
+                    <span class="highlight">豪华内饰</span>
+                  </div>
+                  <div class="car-buttons">
+                    <button class="btn btn-outline">预约试驾</button>
+                    <button class="btn btn-primary" onclick="alert('查看详情: 星驰X9')">查看详情</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="height:16px;"></div>
+            </div>
+
+            <!-- ═══ EXPLORE SCREEN ══════════════════════════════════════ -->
+            <div class="screen" id="screen-explore">
+              <div style="display:flex;border-bottom:1px solid var(--grey200);background:var(--white);">
+                <div style="flex:1;padding:12px 0;text-align:center;font-size:12px;font-weight:700;color:var(--primary);border-bottom:2px solid var(--primary);">品牌故事</div>
+                <div style="flex:1;padding:12px 0;text-align:center;font-size:12px;color:var(--grey500);">活动日历</div>
+                <div style="flex:1;padding:12px 0;text-align:center;font-size:12px;color:var(--grey500);">展厅门店</div>
+                <div style="flex:1;padding:12px 0;text-align:center;font-size:12px;color:var(--grey500);">品牌画廊</div>
+              </div>
+
+              <div class="brand-hero">
+                <h2>星驰汽车的故事</h2>
+                <p>Since 2019 · 智慧出行先行者</p>
+              </div>
+
+              <div style="padding:16px;background:var(--white);margin-bottom:8px;">
+                <p style="font-size:13px;color:var(--grey700);line-height:1.7;">星驰汽车成立于2019年，是一家专注于新能源智能汽车的科技公司。我们以"让每个家庭都拥有一辆智能电动车"为使命，不断探索汽车与科技的融合边界。</p>
+              </div>
+
+              <div class="section-header">品牌历程</div>
+              <div style="background:var(--white);margin-bottom:8px;">
+                <div class="milestone-item"><span class="milestone-year">2019</span><span class="milestone-text">星驰汽车正式成立</span></div>
+                <div class="milestone-item"><span class="milestone-year">2021</span><span class="milestone-text">首款量产车型发布</span></div>
+                <div class="milestone-item"><span class="milestone-year">2022</span><span class="milestone-text">累计交付突破10万辆</span></div>
+                <div class="milestone-item"><span class="milestone-year">2023</span><span class="milestone-text">全国服务中心突破100家</span></div>
+                <div class="milestone-item"><span class="milestone-year">2024</span><span class="milestone-text">星驰S7旗舰SUV震撼上市</span></div>
+              </div>
+
+              <div class="section-header">近期活动</div>
+              <div class="event-card">
+                <div class="event-img">🎪</div>
+                <div class="event-info">
+                  <div class="event-title">2024星驰品牌体验日</div>
+                  <div class="event-meta">
+                    <span>📅 2024-06-15</span>
+                    <span>📍 全国18城同步</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="event-card">
+                <div class="event-img" style="background:linear-gradient(135deg,#2196f3,#0d47a1);">🔬</div>
+                <div class="event-info">
+                  <div class="event-title">星驰科技开放日</div>
+                  <div class="event-meta">
+                    <span>📅 2024-07-20</span>
+                    <span>📍 上海星驰总部</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="height:16px;"></div>
+            </div>
+
+            <!-- ═══ MALL SCREEN ══════════════════════════════════════════ -->
+            <div class="screen" id="screen-mall">
+              <!-- Category strip -->
+              <div class="cat-strip">
+                <div class="cat-item">
+                  <div class="cat-icon-wrap">🎨</div>
+                  <span class="cat-label">外观改装</span>
+                </div>
+                <div class="cat-item">
+                  <div class="cat-icon-wrap">🛋️</div>
+                  <span class="cat-label">内饰配件</span>
+                </div>
+                <div class="cat-item">
+                  <div class="cat-icon-wrap">📱</div>
+                  <span class="cat-label">电子设备</span>
+                </div>
+                <div class="cat-item">
+                  <div class="cat-icon-wrap">🎁</div>
+                  <span class="cat-label">品牌周边</span>
+                </div>
+                <div class="cat-item">
+                  <div class="cat-icon-wrap">🔧</div>
+                  <span class="cat-label">养护用品</span>
+                </div>
+              </div>
+
+              <!-- Banner -->
+              <div class="mall-banner">
+                <h3>品牌精选</h3>
+                <p>原厂配件 · 品牌周边 · 品质保证</p>
+              </div>
+
+              <!-- Product grid -->
+              <div style="padding:4px 12px 6px;font-size:13px;font-weight:600;color:var(--grey900);">热门商品</div>
+              <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card" onclick="alert('商品详情: 碳纤维尾翼')">
+                  <div class="product-img-placeholder" style="position:relative;">
+                    🏎️
+                    <div class="sale-badge" style="position:absolute;top:6px;left:6px;">精选</div>
+                  </div>
+                  <div class="product-info">
+                    <div class="product-name">碳纤维尾翼</div>
+                    <div class="product-rating"><span class="star">★★★★★</span> 4.8 (62)</div>
+                    <div class="product-price-row">
+                      <div>
+                        <div class="product-price">¥3,800</div>
+                      </div>
+                      <button class="add-btn">+</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card" onclick="alert('商品详情: 星驰保温杯')">
+                  <div class="product-img-placeholder" style="position:relative;background:linear-gradient(135deg,#e8f4fd,#bbdefb);">
+                    ☕
+                    <div class="sale-badge" style="position:absolute;top:6px;left:6px;">特惠</div>
+                  </div>
+                  <div class="product-info">
+                    <div class="product-name">星驰品牌保温杯</div>
+                    <div class="product-rating"><span class="star">★★★★☆</span> 4.6 (148)</div>
+                    <div class="product-price-row">
+                      <div>
+                        <div class="product-price">¥168</div>
+                        <div class="product-orig">¥198</div>
+                      </div>
+                      <button class="add-btn">+</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card" onclick="alert('商品详情: 全天候脚垫')">
+                  <div class="product-img-placeholder" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+                    🧹
+                  </div>
+                  <div class="product-info">
+                    <div class="product-name">全天候脚垫套装</div>
+                    <div class="product-rating"><span class="star">★★★★★</span> 4.9 (234)</div>
+                    <div class="product-price-row">
+                      <div><div class="product-price">¥880</div></div>
+                      <button class="add-btn">+</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card" onclick="alert('商品详情: 行车记录仪')">
+                  <div class="product-img-placeholder" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+                    📷
+                  </div>
+                  <div class="product-info">
+                    <div class="product-name">4K行车记录仪</div>
+                    <div class="product-rating"><span class="star">★★★★☆</span> 4.5 (89)</div>
+                    <div class="product-price-row">
+                      <div><div class="product-price">¥1,299</div></div>
+                      <button class="add-btn">+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ═══ SERVICE SCREEN ══════════════════════════════════════ -->
+            <div class="screen" id="screen-service">
+              <!-- Emergency banner -->
+              <div class="emergency-banner">
+                <div class="emergency-icon">📞</div>
+                <div class="emergency-info">
+                  <div class="title">紧急道路救援</div>
+                  <div class="num">400-888-0000</div>
+                </div>
+                <button class="emergency-call">呼叫</button>
+              </div>
+
+              <div class="section-header" style="margin-top:8px;">服务项目</div>
+              <div class="service-grid">
+                <div class="service-card">
+                  <div class="service-icon">🔧</div>
+                  <div class="service-title">保养预约</div>
+                  <div class="service-sub">定期保养，延长车辆寿命</div>
+                </div>
+                <div class="service-card">
+                  <div class="service-icon">🚗</div>
+                  <div class="service-title">维修服务</div>
+                  <div class="service-sub">专业维修，恢复最佳状态</div>
+                </div>
+                <div class="service-card">
+                  <div class="service-icon">✅</div>
+                  <div class="service-title">质保信息</div>
+                  <div class="service-sub">查看您的车辆质保范围</div>
+                </div>
+                <div class="service-card">
+                  <div class="service-icon">💬</div>
+                  <div class="service-title">在线客服</div>
+                  <div class="service-sub">7×24小时专属服务</div>
+                </div>
+                <div class="service-card">
+                  <div class="service-icon">📍</div>
+                  <div class="service-title">服务中心</div>
+                  <div class="service-sub">查找附近服务网点</div>
+                </div>
+                <div class="service-card">
+                  <div class="service-icon">📋</div>
+                  <div class="service-title">服务记录</div>
+                  <div class="service-sub">查看历史维修记录</div>
+                </div>
+              </div>
+
+              <div class="section-header">质保信息</div>
+              <div style="background:var(--white);padding:0 16px;margin-bottom:8px;">
+                <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--grey100);">
+                  <span style="font-size:13px;color:var(--grey700);">整车质保</span>
+                  <span style="font-size:13px;font-weight:600;color:var(--primary);">3年/12万公里</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--grey100);">
+                  <span style="font-size:13px;color:var(--grey700);">动力总成</span>
+                  <span style="font-size:13px;font-weight:600;color:var(--primary);">5年/20万公里</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--grey100);">
+                  <span style="font-size:13px;color:var(--grey700);">电池质保</span>
+                  <span style="font-size:13px;font-weight:600;color:var(--success);">8年/16万公里</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:12px 0;">
+                  <span style="font-size:13px;color:var(--grey700);">车身生锈</span>
+                  <span style="font-size:13px;font-weight:600;color:var(--primary);">6年不限公里</span>
+                </div>
+              </div>
+
+              <div class="section-header">常见问题</div>
+              <div style="background:var(--white);margin-bottom:16px;">
+                <div style="padding:13px 16px;border-bottom:1px solid var(--grey100);display:flex;justify-content:space-between;align-items:center;">
+                  <span style="font-size:13px;font-weight:500;">新车首保需要多少公里？</span>
+                  <span style="color:var(--grey300);">›</span>
+                </div>
+                <div style="padding:13px 16px;border-bottom:1px solid var(--grey100);display:flex;justify-content:space-between;align-items:center;">
+                  <span style="font-size:13px;font-weight:500;">电动车充电多久能充满？</span>
+                  <span style="color:var(--grey300);">›</span>
+                </div>
+                <div style="padding:13px 16px;display:flex;justify-content:space-between;align-items:center;">
+                  <span style="font-size:13px;font-weight:500;">如何预约上门服务？</span>
+                  <span style="color:var(--grey300);">›</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ═══ PROFILE SCREEN ══════════════════════════════════════ -->
+            <div class="screen" id="screen-profile">
+              <div class="profile-header">
+                <div style="display:flex;justify-content:flex-end;margin-bottom:4px;">
+                  <span style="font-size:20px;cursor:pointer;">⚙️</span>
+                </div>
+                <div class="profile-row">
+                  <div class="profile-avatar">星</div>
+                  <div>
+                    <div class="profile-name">星驰用户</div>
+                    <div class="profile-phone">138****8888</div>
+                  </div>
+                </div>
+                <div class="stats-row">
+                  <div class="stat"><div class="stat-num">12</div><div class="stat-lbl">帖子</div></div>
+                  <div class="stat"><div class="stat-num">89</div><div class="stat-lbl">关注</div></div>
+                  <div class="stat"><div class="stat-num">341</div><div class="stat-lbl">粉丝</div></div>
+                </div>
+              </div>
+
+              <!-- Orders -->
+              <div class="menu-section">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px 4px;">
+                  <span style="font-size:14px;font-weight:600;">我的订单</span>
+                  <span style="font-size:12px;color:var(--primary);">查看全部 ›</span>
+                </div>
+                <div class="order-row">
+                  <div class="order-item"><div class="order-item-icon">💳</div><div class="order-item-label">待付款</div></div>
+                  <div class="order-item"><div class="order-item-icon">📦</div><div class="order-item-label">待发货</div></div>
+                  <div class="order-item"><div class="order-item-icon">🚚</div><div class="order-item-label">待收货</div></div>
+                  <div class="order-item"><div class="order-item-icon">⭐</div><div class="order-item-label">待评价</div></div>
+                  <div class="order-item"><div class="order-item-icon">🔄</div><div class="order-item-label">退换货</div></div>
+                </div>
+              </div>
+
+              <!-- Services -->
+              <div class="menu-section" style="margin-top:12px;">
+                <div style="padding:12px 16px 4px;font-size:14px;font-weight:600;">我的服务</div>
+                <div class="menu-item">
+                  <div class="menu-icon-wrap" style="background:rgba(26,26,46,.08);">🚗</div>
+                  <span class="menu-text">我的爱车</span>
+                  <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item">
+                  <div class="menu-icon-wrap" style="background:rgba(233,69,96,.1);">❤️</div>
+                  <span class="menu-text">我的收藏</span>
+                  <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item">
+                  <div class="menu-icon-wrap" style="background:rgba(33,150,243,.1);">📍</div>
+                  <span class="menu-text">收货地址</span>
+                  <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item">
+                  <div class="menu-icon-wrap" style="background:rgba(255,152,0,.1);">🎟️</div>
+                  <span class="menu-text">优惠券</span>
+                  <span class="menu-arrow">›</span>
+                </div>
+              </div>
+
+              <!-- Other -->
+              <div class="menu-section" style="margin-top:12px;margin-bottom:16px;">
+                <div class="menu-item">
+                  <div class="menu-icon-wrap" style="background:rgba(96,125,139,.1);">❓</div>
+                  <span class="menu-text">帮助中心</span>
+                  <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item">
+                  <div class="menu-icon-wrap" style="background:rgba(96,125,139,.1);">ℹ️</div>
+                  <span class="menu-text">关于星驰</span>
+                  <span class="menu-arrow">›</span>
+                </div>
+                <div class="menu-item" onclick="alert('已退出登录')">
+                  <div class="menu-icon-wrap" style="background:rgba(244,67,54,.1);">🚪</div>
+                  <span class="menu-text" style="color:var(--error);">退出登录</span>
+                  <span class="menu-arrow">›</span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /screen-content -->
+
+          <!-- Tab bar (only shown when not on login) -->
+          <div class="tab-bar" id="tabBar">
+            <button class="tab-item" id="tab-social" onclick="switchTab(this,'social','社区')">
+              <span class="tab-icon">👥</span>
+              <span class="tab-label">社区</span>
+            </button>
+            <button class="tab-item" id="tab-publication" onclick="switchTab(this,'publication','发布')">
+              <span class="tab-icon">📰</span>
+              <span class="tab-label">发布</span>
+            </button>
+            <button class="tab-item" id="tab-purchase" onclick="switchTab(this,'purchase','购车')">
+              <span class="tab-icon">🚗</span>
+              <span class="tab-label">购车</span>
+            </button>
+            <button class="tab-item" id="tab-explore" onclick="switchTab(this,'explore','探索')">
+              <span class="tab-icon">🌟</span>
+              <span class="tab-label">探索</span>
+            </button>
+            <button class="tab-item" id="tab-mall" onclick="switchTab(this,'mall','商城')">
+              <span class="tab-icon" style="position:relative;">🛍️<span class="cart-badge">3</span></span>
+              <span class="tab-label">商城</span>
+            </button>
+            <button class="tab-item" id="tab-service" onclick="switchTab(this,'service','服务')">
+              <span class="tab-icon">🔧</span>
+              <span class="tab-label">服务</span>
+            </button>
+            <button class="tab-item" id="tab-profile" onclick="switchTab(this,'profile','我的')">
+              <span class="tab-icon">👤</span>
+              <span class="tab-label">我的</span>
+            </button>
+          </div>
+
+        </div><!-- /phone-screen -->
+      </div><!-- /phone-frame -->
+    </div><!-- /phone-wrap -->
+
+    <!-- Caption below phone -->
+    <div style="text-align:center;color:rgba(255,255,255,.5);font-size:12px;max-width:375px;line-height:1.5;">
+      Click the bottom tabs or the screen buttons on the left to navigate between screens.
+      All 8 screens are interactive.
+    </div>
+
+  </div><!-- /phone-col -->
+
+</div><!-- /demo-wrapper -->
+
+<script>
+const screenTitles = {
+  login:       { title: 'Starmotor 星驰汽车', hideTab: true  },
+  social:      { title: '社区',                hideTab: false },
+  publication: { title: '官方发布',            hideTab: false },
+  purchase:    { title: '购车',                hideTab: false },
+  explore:     { title: '探索品牌',            hideTab: false },
+  mall:        { title: '商城',                hideTab: false },
+  service:     { title: '服务',               hideTab: false },
+  profile:     { title: '我的',               hideTab: false },
+};
+
+let currentScreen = 'social';
+
+// Set initial active tab
+document.getElementById('tab-social').classList.add('active');
+
+function switchScreen(name) {
+  // Hide all screens
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  // Show target
+  document.getElementById('screen-' + name).classList.add('active');
+  // Update app bar
+  document.getElementById('appBarTitle').textContent = screenTitles[name].title;
+  // Show/hide tab bar
+  const tabBar = document.getElementById('tabBar');
+  tabBar.style.display = screenTitles[name].hideTab ? 'none' : 'flex';
+  // Scroll to top
+  document.getElementById('screen-' + name).scrollTop = 0;
+  currentScreen = name;
+}
+
+function switchTab(el, name, title) {
+  // Remove active from all tabs
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  // Update left nav
+  document.querySelectorAll('.screen-nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.screen === name);
+  });
+  switchScreen(name);
+}
+
+function switchScreenBtn(el, name) {
+  // Update left nav
+  document.querySelectorAll('.screen-nav-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  // Update bottom tabs
+  const tabId = 'tab-' + name;
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  const tabEl = document.getElementById(tabId);
+  if (tabEl) tabEl.classList.add('active');
+  switchScreen(name);
+}
+</script>
+</body>
+</html>
