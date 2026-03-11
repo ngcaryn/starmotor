@@ -185,13 +185,15 @@ EXPO_PUBLIC_APP_ENV=development
 
 ## 🎨 Design Theme
 
-The app follows a **high-tech automotive design language**:
-- **Primary Background:** `#0a0a0f` (near-black)
-- **Card Background:** `#12121f` (dark navy)
-- **Neon Accent:** `#00d4ff` (electric cyan)
-- **Text Primary:** `#ffffff`
-- **Text Secondary:** `#8a8a9a`
-- **Danger:** `#ff4d6d`
+The app follows a **precision-automotive metallic design language**:
+- **Primary Background:** `#111112` (deep charcoal)
+- **Card Background:** `#1a1a1c` (gunmetal steel)
+- **Accent:** `#a0aab4` (brushed aluminum / cool silver)
+- **Text Primary:** `#f0f0f2` (platinum white)
+- **Text Secondary:** `#8c8c90` (silver gray)
+- **Danger:** `#b84040` (muted red)
+
+All design tokens are centralized in `app/theme/colors.ts`.
 
 ---
 

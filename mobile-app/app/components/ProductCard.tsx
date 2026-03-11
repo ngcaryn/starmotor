@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Colors from '../theme/colors';
 import { Product } from '../store/appSlice';
 
 interface ProductCardProps {
@@ -44,7 +44,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           />
         ) : (
           <View style={styles.imagePlaceholder}>
-            <Ionicons name="cube-outline" size={36} color="#00d4ff" />
+            <Text style={styles.placeholderText}>
+              {product.category.substring(0, 3).toUpperCase()}
+            </Text>
           </View>
         )}
         {product.stock === 0 && (
@@ -75,11 +77,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
             disabled={product.stock === 0}
             accessibilityLabel={`Add ${product.name} to cart`}
           >
-            <Ionicons
-              name="add"
-              size={20}
-              color={product.stock === 0 ? '#4a4a5a' : '#0a0a0f'}
-            />
+            <Text
+              style={[
+                styles.addButtonText,
+                product.stock === 0 && styles.addButtonTextDisabled,
+              ]}
+            >
+              +
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -89,23 +94,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#12121f',
-    borderRadius: 12,
-    marginVertical: 6,
+    backgroundColor: Colors.bgCard,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#1e1e35',
+    borderColor: Colors.border,
     overflow: 'hidden',
     flex: 1,
     margin: 6,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.18,
+    shadowRadius: 4,
+    elevation: 3,
   },
   imageContainer: {
-    height: 140,
-    backgroundColor: '#0d0d1a',
+    height: 130,
+    backgroundColor: Colors.bgInset,
     position: 'relative',
   },
   image: {
@@ -116,40 +120,48 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.bgInset,
+  },
+  placeholderText: {
+    color: Colors.accentDim,
+    fontSize: 20,
+    fontWeight: '200',
+    letterSpacing: 3,
   },
   outOfStockOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(10,10,15,0.7)',
+    backgroundColor: 'rgba(14,14,15,0.7)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   outOfStockText: {
-    color: '#ff4d6d',
-    fontWeight: '700',
-    fontSize: 13,
+    color: Colors.danger,
+    fontWeight: '600',
+    fontSize: 12,
+    letterSpacing: 0.5,
   },
   infoContainer: {
     padding: 12,
   },
   category: {
-    color: '#00d4ff',
-    fontSize: 10,
+    color: Colors.accentDim,
+    fontSize: 9,
     fontWeight: '600',
-    letterSpacing: 1.2,
+    letterSpacing: 1.5,
     textTransform: 'uppercase',
     marginBottom: 4,
   },
   name: {
-    color: '#ffffff',
-    fontSize: 15,
-    fontWeight: '700',
+    color: Colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '600',
     marginBottom: 4,
-    lineHeight: 20,
+    lineHeight: 19,
   },
   description: {
-    color: '#6a6a7a',
-    fontSize: 12,
-    lineHeight: 16,
+    color: Colors.textDim,
+    fontSize: 11,
+    lineHeight: 15,
     marginBottom: 10,
   },
   footer: {
@@ -158,20 +170,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   price: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '800',
+    color: Colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '700',
   },
   addButton: {
-    backgroundColor: '#00d4ff',
-    borderRadius: 8,
-    width: 32,
-    height: 32,
+    backgroundColor: Colors.accent,
+    borderRadius: 6,
+    width: 30,
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
   addButtonDisabled: {
-    backgroundColor: '#1e1e35',
+    backgroundColor: Colors.bgElevated,
+  },
+  addButtonText: {
+    color: Colors.bgPrimary,
+    fontSize: 20,
+    lineHeight: 22,
+    fontWeight: '300',
+  },
+  addButtonTextDisabled: {
+    color: Colors.textDim,
   },
 });
 

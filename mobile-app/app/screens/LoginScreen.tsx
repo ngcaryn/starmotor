@@ -10,11 +10,11 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../store/authSlice';
 import { RootState } from '../store/store';
 import Button from '../components/Button';
+import Colors from '../theme/colors';
 import { login } from '../services/authService';
 
 const LoginScreen: React.FC = () => {
@@ -52,73 +52,57 @@ const LoginScreen: React.FC = () => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* Brand logo area */}
+        {/* Brand mark */}
         <View style={styles.logoContainer}>
-          <View style={styles.logoCircle}>
-            <Ionicons name="car-sport" size={52} color="#00d4ff" />
+          <View style={styles.logoMark}>
+            <Text style={styles.logoLetter}>S</Text>
           </View>
           <Text style={styles.brandName}>STARMOTOR</Text>
-          <Text style={styles.tagline}>Drive the Future</Text>
+          <Text style={styles.tagline}>PRECISION · PERFORMANCE · FUTURE</Text>
         </View>
 
         {/* Login form */}
         <View style={styles.formContainer}>
-          <Text style={styles.formTitle}>Welcome Back</Text>
+          <Text style={styles.formTitle}>Sign In</Text>
 
           {/* Email field */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Email</Text>
-            <View style={styles.inputWrapper}>
-              <Ionicons
-                name="mail-outline"
-                size={18}
-                color="#4a4a5a"
-                style={styles.inputIcon}
-              />
-              <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                placeholder="Enter your email"
-                placeholderTextColor="#4a4a5a"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                editable={!loading}
-              />
-            </View>
+            <Text style={styles.label}>EMAIL</Text>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="your@email.com"
+              placeholderTextColor={Colors.textDim}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              editable={!loading}
+            />
           </View>
 
           {/* Password field */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Password</Text>
-            <View style={styles.inputWrapper}>
-              <Ionicons
-                name="lock-closed-outline"
-                size={18}
-                color="#4a4a5a"
-                style={styles.inputIcon}
-              />
+            <Text style={styles.label}>PASSWORD</Text>
+            <View style={styles.passwordRow}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, styles.passwordInput]}
                 value={password}
                 onChangeText={setPassword}
-                placeholder="Enter your password"
-                placeholderTextColor="#4a4a5a"
+                placeholder="••••••••"
+                placeholderTextColor={Colors.textDim}
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
                 editable={!loading}
               />
               <TouchableOpacity
                 onPress={() => setShowPassword(!showPassword)}
-                style={styles.eyeButton}
+                style={styles.toggleButton}
                 accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
               >
-                <Ionicons
-                  name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                  size={18}
-                  color="#4a4a5a"
-                />
+                <Text style={styles.toggleText}>
+                  {showPassword ? 'Hide' : 'Show'}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -126,7 +110,6 @@ const LoginScreen: React.FC = () => {
           {/* Error message */}
           {error ? (
             <View style={styles.errorContainer}>
-              <Ionicons name="alert-circle-outline" size={16} color="#ff4d6d" />
               <Text style={styles.errorText}>{error}</Text>
             </View>
           ) : null}
@@ -164,7 +147,8 @@ const LoginScreen: React.FC = () => {
         </View>
 
         <Text style={styles.footerText}>
-          New to StarMotor? <Text style={styles.signUpLink}>Create Account</Text>
+          New to StarMotor?{'  '}
+          <Text style={styles.signUpLink}>Create Account</Text>
         </Text>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -174,7 +158,7 @@ const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0f',
+    backgroundColor: Colors.bgPrimary,
   },
   scrollContent: {
     flexGrow: 1,
@@ -186,102 +170,108 @@ const styles = StyleSheet.create({
     paddingTop: 80,
     paddingBottom: 40,
   },
-  logoCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#12121f',
-    borderWidth: 2,
-    borderColor: '#00d4ff',
+  logoMark: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: Colors.bgCard,
+    borderWidth: 1,
+    borderColor: Colors.border,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
-    shadowColor: '#00d4ff',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.4,
-    shadowRadius: 15,
-    elevation: 10,
+    marginBottom: 20,
+  },
+  logoLetter: {
+    color: Colors.accent,
+    fontSize: 32,
+    fontWeight: '200',
+    letterSpacing: 2,
   },
   brandName: {
-    color: '#ffffff',
-    fontSize: 26,
-    fontWeight: '800',
-    letterSpacing: 6,
-    marginBottom: 4,
+    color: Colors.textPrimary,
+    fontSize: 22,
+    fontWeight: '600',
+    letterSpacing: 8,
+    marginBottom: 8,
   },
   tagline: {
-    color: '#00d4ff',
-    fontSize: 13,
-    letterSpacing: 3,
-    fontWeight: '500',
+    color: Colors.textDim,
+    fontSize: 10,
+    letterSpacing: 2,
+    fontWeight: '400',
   },
   formContainer: {
-    backgroundColor: '#12121f',
-    borderRadius: 20,
+    backgroundColor: Colors.bgCard,
+    borderRadius: 10,
     padding: 24,
     borderWidth: 1,
-    borderColor: '#1e1e35',
+    borderColor: Colors.border,
   },
   formTitle: {
-    color: '#ffffff',
-    fontSize: 22,
-    fontWeight: '700',
-    marginBottom: 24,
-  },
-  inputGroup: {
-    marginBottom: 16,
-  },
-  label: {
-    color: '#8a8a9a',
-    fontSize: 13,
+    color: Colors.textPrimary,
+    fontSize: 20,
     fontWeight: '600',
-    marginBottom: 8,
+    marginBottom: 24,
     letterSpacing: 0.5,
   },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#0d0d1a',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#2a2a3e',
+  inputGroup: {
+    marginBottom: 18,
   },
-  inputIcon: {
-    marginLeft: 14,
-    marginRight: 4,
+  label: {
+    color: Colors.textDim,
+    fontSize: 10,
+    fontWeight: '600',
+    marginBottom: 8,
+    letterSpacing: 1.5,
   },
   input: {
     flex: 1,
-    color: '#ffffff',
+    color: Colors.textPrimary,
     fontSize: 15,
+    backgroundColor: Colors.bgInset,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    paddingHorizontal: 14,
     paddingVertical: 13,
-    paddingRight: 14,
   },
-  eyeButton: {
-    padding: 13,
-  },
-  errorContainer: {
+  passwordRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    backgroundColor: 'rgba(255, 77, 109, 0.1)',
-    borderRadius: 8,
+    gap: 8,
+  },
+  passwordInput: {
+    flex: 1,
+  },
+  toggleButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 13,
+  },
+  toggleText: {
+    color: Colors.accentDim,
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  errorContainer: {
+    backgroundColor: 'rgba(184,64,64,0.08)',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(184,64,64,0.25)',
     padding: 10,
     marginBottom: 12,
   },
   errorText: {
-    color: '#ff4d6d',
+    color: Colors.danger,
     fontSize: 13,
-    flex: 1,
   },
   forgotPassword: {
     alignSelf: 'flex-end',
     marginBottom: 20,
   },
   forgotPasswordText: {
-    color: '#00d4ff',
+    color: Colors.accentDim,
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '500',
   },
   loginButton: {
     marginBottom: 16,
@@ -295,22 +285,23 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#1e1e35',
+    backgroundColor: Colors.border,
   },
   dividerText: {
-    color: '#4a4a5a',
-    fontSize: 12,
-    fontWeight: '600',
+    color: Colors.textDim,
+    fontSize: 11,
+    fontWeight: '500',
+    letterSpacing: 1,
   },
   footerText: {
-    color: '#4a4a5a',
+    color: Colors.textDim,
     fontSize: 14,
     textAlign: 'center',
     marginTop: 24,
   },
   signUpLink: {
-    color: '#00d4ff',
-    fontWeight: '700',
+    color: Colors.accent,
+    fontWeight: '600',
   },
 });
 

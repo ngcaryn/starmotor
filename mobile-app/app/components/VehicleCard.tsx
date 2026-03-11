@@ -7,7 +7,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Colors from '../theme/colors';
 import { Vehicle } from '../store/appSlice';
 
 interface VehicleCardProps {
@@ -48,7 +48,9 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           />
         ) : (
           <View style={styles.imagePlaceholder}>
-            <Ionicons name="car-sport" size={48} color="#00d4ff" />
+            <Text style={styles.placeholderInitials}>
+              {vehicle.model.substring(0, 2).toUpperCase()}
+            </Text>
           </View>
         )}
         {vehicle.isNew && (
@@ -63,33 +65,29 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         <Text style={styles.model}>{vehicle.model}</Text>
         <Text style={styles.name}>{vehicle.name}</Text>
 
-        {/* Key specs */}
+        {/* Key specs — label prefix replaces icons */}
         <View style={styles.specsRow}>
           {vehicle.specs.range && (
             <View style={styles.specItem}>
-              <Ionicons name="battery-charging" size={14} color="#00d4ff" />
-              <Text style={styles.specText}>{vehicle.specs.range}</Text>
+              <Text style={styles.specText}>Range  {vehicle.specs.range}</Text>
             </View>
           )}
           {vehicle.specs.acceleration && (
             <View style={styles.specItem}>
-              <Ionicons name="speedometer" size={14} color="#00d4ff" />
-              <Text style={styles.specText}>{vehicle.specs.acceleration}</Text>
+              <Text style={styles.specText}>0–60  {vehicle.specs.acceleration}</Text>
             </View>
           )}
           {vehicle.specs.horsepower && (
             <View style={styles.specItem}>
-              <Ionicons name="flash" size={14} color="#00d4ff" />
-              <Text style={styles.specText}>{vehicle.specs.horsepower}</Text>
+              <Text style={styles.specText}>HP  {vehicle.specs.horsepower}</Text>
             </View>
           )}
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.price}>{formattedPrice}</Text>
-          <TouchableOpacity style={styles.inquireButton} onPress={() => onPress(vehicle)}>
-            <Text style={styles.inquireText}>Explore</Text>
-            <Ionicons name="arrow-forward" size={14} color="#00d4ff" />
+          <TouchableOpacity style={styles.exploreButton} onPress={() => onPress(vehicle)}>
+            <Text style={styles.exploreText}>Explore  ›</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -99,19 +97,19 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#12121f',
-    borderRadius: 16,
-    marginVertical: 8,
+    backgroundColor: Colors.bgCard,
+    borderRadius: 10,
+    marginVertical: 6,
     marginHorizontal: 4,
     borderWidth: 1,
-    borderColor: '#1e1e35',
+    borderColor: Colors.border,
     overflow: 'hidden',
     width: width * 0.72,
-    shadowColor: '#00d4ff',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowOpacity: 0.18,
+    shadowRadius: 6,
+    elevation: 4,
   },
   horizontalContainer: {
     flexDirection: 'row',
@@ -119,12 +117,12 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     height: 180,
-    backgroundColor: '#0d0d1a',
+    backgroundColor: Colors.bgInset,
     position: 'relative',
   },
   horizontalImage: {
     width: 140,
-    height: 'auto',
+    height: 'auto' as any,
   },
   image: {
     width: '100%',
@@ -134,58 +132,66 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0d0d1a',
+    backgroundColor: Colors.bgInset,
+  },
+  placeholderInitials: {
+    color: Colors.accentDim,
+    fontSize: 36,
+    fontWeight: '200',
+    letterSpacing: 4,
   },
   newBadge: {
     position: 'absolute',
     top: 10,
     left: 10,
-    backgroundColor: '#00d4ff',
-    borderRadius: 4,
+    backgroundColor: Colors.bgCard,
+    borderRadius: 3,
     paddingHorizontal: 8,
     paddingVertical: 3,
+    borderWidth: 1,
+    borderColor: Colors.borderActive,
   },
   newBadgeText: {
-    color: '#0a0a0f',
-    fontSize: 10,
-    fontWeight: '800',
-    letterSpacing: 1,
+    color: Colors.accent,
+    fontSize: 9,
+    fontWeight: '700',
+    letterSpacing: 1.5,
   },
   infoContainer: {
     padding: 14,
   },
   model: {
-    color: '#00d4ff',
-    fontSize: 11,
-    fontWeight: '600',
-    letterSpacing: 1.5,
+    color: Colors.accentDim,
+    fontSize: 10,
+    fontWeight: '500',
+    letterSpacing: 2,
     textTransform: 'uppercase',
     marginBottom: 2,
   },
   name: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '700',
+    color: Colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '600',
     marginBottom: 10,
   },
   specsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 6,
     marginBottom: 12,
   },
   specItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: '#0d0d1a',
+    backgroundColor: Colors.bgInset,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 6,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.borderDark,
   },
   specText: {
-    color: '#8a8a9a',
-    fontSize: 12,
+    color: Colors.textSecondary,
+    fontSize: 11,
+    fontWeight: '400',
   },
   footer: {
     flexDirection: 'row',
@@ -193,19 +199,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   price: {
-    color: '#ffffff',
-    fontSize: 20,
-    fontWeight: '800',
+    color: Colors.textPrimary,
+    fontSize: 19,
+    fontWeight: '700',
   },
-  inquireButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
+  exploreButton: {
+    paddingVertical: 4,
   },
-  inquireText: {
-    color: '#00d4ff',
+  exploreText: {
+    color: Colors.accent,
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '500',
+    letterSpacing: 0.3,
   },
 });
 

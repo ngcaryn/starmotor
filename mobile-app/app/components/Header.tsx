@@ -7,23 +7,24 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Colors from '../theme/colors';
 
 interface HeaderProps {
   title: string;
   showBack?: boolean;
   onBack?: () => void;
-  rightIcon?: string;
+  /** Text label for the right action button */
+  rightLabel?: string;
   onRightPress?: () => void;
   subtitle?: string;
 }
 
-// Top navigation header with optional back button and right action icon
+// Top navigation header with optional back button and right action label
 const Header: React.FC<HeaderProps> = ({
   title,
   showBack = false,
   onBack,
-  rightIcon,
+  rightLabel,
   onRightPress,
   subtitle,
 }) => {
@@ -33,10 +34,10 @@ const Header: React.FC<HeaderProps> = ({
         {showBack && (
           <TouchableOpacity
             onPress={onBack}
-            style={styles.iconButton}
+            style={styles.actionButton}
             accessibilityLabel="Go back"
           >
-            <Ionicons name="chevron-back" size={24} color="#00d4ff" />
+            <Text style={styles.backText}>‹</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -53,13 +54,13 @@ const Header: React.FC<HeaderProps> = ({
       </View>
 
       <View style={styles.rightSection}>
-        {rightIcon && (
+        {rightLabel && (
           <TouchableOpacity
             onPress={onRightPress}
-            style={styles.iconButton}
+            style={styles.actionButton}
             accessibilityLabel="Header action"
           >
-            <Ionicons name={rightIcon as any} size={24} color="#00d4ff" />
+            <Text style={styles.rightText}>{rightLabel}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -72,15 +73,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#0a0a0f',
+    backgroundColor: Colors.bgPrimary,
     paddingTop: Platform.OS === 'ios' ? 48 : StatusBar.currentHeight ?? 24,
     paddingBottom: 14,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#1a1a2e',
+    borderBottomColor: Colors.borderDark,
   },
   leftSection: {
-    width: 40,
+    width: 44,
     alignItems: 'flex-start',
   },
   centerSection: {
@@ -88,22 +89,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rightSection: {
-    width: 40,
+    width: 44,
     alignItems: 'flex-end',
   },
   title: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '700',
-    letterSpacing: 0.5,
+    color: Colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
   subtitle: {
-    color: '#8a8a9a',
+    color: Colors.textSecondary,
     fontSize: 12,
     marginTop: 2,
   },
-  iconButton: {
+  actionButton: {
     padding: 4,
+  },
+  backText: {
+    color: Colors.accent,
+    fontSize: 28,
+    lineHeight: 28,
+    fontWeight: '300',
+  },
+  rightText: {
+    color: Colors.accent,
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 0.3,
   },
 });
 

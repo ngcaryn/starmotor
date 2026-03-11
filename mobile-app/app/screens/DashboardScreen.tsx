@@ -7,13 +7,15 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
+  Linking,
+  Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
-import { setVehicles, setProducts, setEvents } from '../store/appSlice';
+import { setVehicles } from '../store/appSlice';
 import Card from '../components/Card';
 import VehicleCard from '../components/VehicleCard';
+import Colors from '../theme/colors';
 
 const { width } = Dimensions.get('window');
 
@@ -58,12 +60,37 @@ const MOCK_VEHICLES = [
 ];
 
 const QUICK_ACTIONS = [
-  { id: 'vehicles', icon: 'car-sport', label: 'Vehicles', screen: 'Vehicles' },
-  { id: 'store', icon: 'bag-handle', label: 'Store', screen: 'Store' },
-  { id: 'events', icon: 'calendar', label: 'Events', screen: 'Events' },
-  { id: 'rewards', icon: 'star', label: 'Rewards', screen: 'Rewards' },
-  { id: 'community', icon: 'people', label: 'Community', screen: 'Community' },
-  { id: 'support', icon: 'headset', label: 'Support', screen: 'CustomerService' },
+  { id: 'vehicles', label: 'Vehicles', screen: 'Vehicles' },
+  { id: 'store', label: 'Store', screen: 'Store' },
+  { id: 'events', label: 'Events', screen: 'Events' },
+  { id: 'rewards', label: 'Rewards', screen: 'Rewards' },
+  { id: 'community', label: 'Community', screen: 'Community' },
+  { id: 'support', label: 'Support', screen: 'CustomerService' },
+];
+
+// News items with external URLs — tap to open in browser
+const NEWS_ITEMS = [
+  {
+    id: 'n1',
+    label: 'PRESS RELEASE',
+    title: 'StarMotor Unveils 1,000-HP StarGT Elite at Shanghai Motor Show',
+    date: 'Jun 2025',
+    url: 'https://insideevs.com',
+  },
+  {
+    id: 'n2',
+    label: 'TECHNOLOGY',
+    title: "StarMotor's 250 kW Solid-State Battery — Full Technical Breakdown",
+    date: 'May 2025',
+    url: 'https://electrek.co',
+  },
+  {
+    id: 'n3',
+    label: 'INDUSTRY',
+    title: 'StarMotor Named Top EV Brand in J.D. Power 2025 Quality Study',
+    date: 'Apr 2025',
+    url: 'https://www.motortrend.com',
+  },
 ];
 
 const DashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -78,6 +105,12 @@ const DashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   const displayVehicles = vehicles.length > 0 ? vehicles : MOCK_VEHICLES;
 
+  const openNewsLink = (url: string) => {
+    Linking.openURL(url).catch(() => {
+      Alert.alert('Unable to Open', 'Could not open the link. Please try again later.');
+    });
+  };
+
   return (
     <ScrollView
       style={styles.container}
@@ -87,40 +120,40 @@ const DashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       {/* Header greeting */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>
-            Welcome back,
-          </Text>
+          <Text style={styles.greeting}>Welcome back</Text>
           <Text style={styles.userName}>{user?.name ?? 'Driver'}</Text>
         </View>
         <TouchableOpacity
-          style={styles.notificationButton}
+          style={styles.settingsButton}
           onPress={() => navigation.navigate('Settings')}
           accessibilityLabel="Settings"
         >
-          <Ionicons name="notifications-outline" size={24} color="#00d4ff" />
-          <View style={styles.notificationDot} />
+          <Text style={styles.settingsLabel}>Settings</Text>
         </TouchableOpacity>
       </View>
 
       {/* Points summary card */}
-      <Card style={styles.pointsCard} glowAccent>
+      <Card style={styles.pointsCard} active>
         <View style={styles.pointsContent}>
           <View>
             <Text style={styles.pointsLabel}>STAR POINTS</Text>
             <Text style={styles.pointsValue}>{rewards.balance.toLocaleString()}</Text>
-            <Text style={styles.pointsSubtext}>Streak: {rewards.streak} days 🔥</Text>
+            <Text style={styles.pointsSubtext}>
+              {rewards.streak > 0
+                ? `${rewards.streak}-day streak`
+                : 'Start your streak today'}
+            </Text>
           </View>
           <TouchableOpacity
             style={styles.checkInButton}
             onPress={() => navigation.navigate('Rewards')}
           >
-            <Ionicons name="checkmark-circle" size={20} color="#0a0a0f" />
             <Text style={styles.checkInText}>Check In</Text>
           </TouchableOpacity>
         </View>
       </Card>
 
-      {/* Quick actions grid */}
+      {/* Quick access grid */}
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Quick Access</Text>
       </View>
@@ -134,9 +167,6 @@ const DashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
             accessibilityRole="button"
             accessibilityLabel={action.label}
           >
-            <View style={styles.quickActionIcon}>
-              <Ionicons name={action.icon as any} size={24} color="#00d4ff" />
-            </View>
             <Text style={styles.quickActionLabel}>{action.label}</Text>
           </TouchableOpacity>
         ))}
@@ -146,7 +176,7 @@ const DashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Featured Models</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Vehicles')}>
-          <Text style={styles.seeAll}>See All</Text>
+          <Text style={styles.seeAll}>View All</Text>
         </TouchableOpacity>
       </View>
 
@@ -164,20 +194,29 @@ const DashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         contentContainerStyle={styles.vehicleList}
       />
 
-      {/* Brand news banner */}
-      <TouchableOpacity
-        style={styles.newsBanner}
-        onPress={() => navigation.navigate('Events')}
-      >
-        <View style={styles.newsBannerContent}>
-          <View>
-            <Text style={styles.newsBannerLabel}>UPCOMING EVENT</Text>
-            <Text style={styles.newsBannerTitle}>StarMotor Launch Summit 2025</Text>
-            <Text style={styles.newsBannerSubtext}>June 15, 2025 • Shanghai</Text>
+      {/* Latest News section */}
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Latest News</Text>
+      </View>
+
+      {NEWS_ITEMS.map((item) => (
+        <TouchableOpacity
+          key={item.id}
+          style={styles.newsItem}
+          onPress={() => openNewsLink(item.url)}
+          accessibilityRole="link"
+          accessibilityLabel={item.title}
+        >
+          <View style={styles.newsItemInner}>
+            <View style={styles.newsTextBlock}>
+              <Text style={styles.newsLabel}>{item.label}</Text>
+              <Text style={styles.newsTitle}>{item.title}</Text>
+              <Text style={styles.newsDate}>{item.date}</Text>
+            </View>
+            <Text style={styles.newsArrow}>›</Text>
           </View>
-          <Ionicons name="arrow-forward-circle" size={32} color="#00d4ff" />
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      ))}
     </ScrollView>
   );
 };
@@ -185,10 +224,10 @@ const DashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0f',
+    backgroundColor: Colors.bgPrimary,
   },
   content: {
-    paddingBottom: 24,
+    paddingBottom: 32,
   },
   header: {
     flexDirection: 'row',
@@ -199,35 +238,33 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   greeting: {
-    color: '#6a6a7a',
-    fontSize: 14,
+    color: Colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '400',
   },
   userName: {
-    color: '#ffffff',
-    fontSize: 22,
-    fontWeight: '700',
+    color: Colors.textPrimary,
+    fontSize: 20,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
-  notificationButton: {
-    position: 'relative',
-    padding: 8,
-    backgroundColor: '#12121f',
-    borderRadius: 12,
+  settingsButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    backgroundColor: Colors.bgCard,
+    borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#1e1e35',
+    borderColor: Colors.border,
   },
-  notificationDot: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#00d4ff',
+  settingsLabel: {
+    color: Colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '500',
+    letterSpacing: 0.3,
   },
   pointsCard: {
     marginHorizontal: 20,
     marginTop: 16,
-    backgroundColor: '#0d1a2e',
   },
   pointsContent: {
     flexDirection: 'row',
@@ -235,53 +272,53 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pointsLabel: {
-    color: '#00d4ff',
-    fontSize: 11,
-    fontWeight: '700',
+    color: Colors.accentDim,
+    fontSize: 10,
+    fontWeight: '600',
     letterSpacing: 2,
     marginBottom: 4,
   },
   pointsValue: {
-    color: '#ffffff',
-    fontSize: 32,
-    fontWeight: '800',
+    color: Colors.textPrimary,
+    fontSize: 30,
+    fontWeight: '600',
     marginBottom: 2,
   },
   pointsSubtext: {
-    color: '#8a8a9a',
-    fontSize: 13,
+    color: Colors.textSecondary,
+    fontSize: 12,
   },
   checkInButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: '#00d4ff',
-    paddingHorizontal: 16,
+    backgroundColor: Colors.accent,
+    paddingHorizontal: 18,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 6,
   },
   checkInText: {
-    color: '#0a0a0f',
-    fontWeight: '700',
-    fontSize: 14,
+    color: Colors.bgPrimary,
+    fontWeight: '600',
+    fontSize: 13,
+    letterSpacing: 0.4,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    marginTop: 24,
+    marginTop: 28,
     marginBottom: 12,
   },
   sectionTitle: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '700',
+    color: Colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
   seeAll: {
-    color: '#00d4ff',
-    fontSize: 13,
-    fontWeight: '600',
+    color: Colors.accentDim,
+    fontSize: 12,
+    fontWeight: '500',
+    letterSpacing: 0.3,
   },
   quickActionsGrid: {
     flexDirection: 'row',
@@ -291,61 +328,64 @@ const styles = StyleSheet.create({
   },
   quickAction: {
     width: (width - 60) / 3,
-    backgroundColor: '#12121f',
-    borderRadius: 12,
-    padding: 14,
+    backgroundColor: Colors.bgCard,
+    borderRadius: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 8,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#1e1e35',
-  },
-  quickActionIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#0d1a2e',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
+    borderColor: Colors.border,
   },
   quickActionLabel: {
-    color: '#8a8a9a',
-    fontSize: 11,
-    fontWeight: '600',
+    color: Colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '500',
+    letterSpacing: 0.3,
   },
   vehicleList: {
     paddingLeft: 16,
     paddingRight: 8,
   },
-  newsBanner: {
+  // News section
+  newsItem: {
     marginHorizontal: 20,
-    marginTop: 24,
-    backgroundColor: '#0d1a2e',
-    borderRadius: 14,
-    padding: 18,
+    marginBottom: 8,
+    backgroundColor: Colors.bgCard,
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#00d4ff',
+    borderColor: Colors.border,
   },
-  newsBannerContent: {
+  newsItemInner: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 14,
+    gap: 8,
   },
-  newsBannerLabel: {
-    color: '#00d4ff',
-    fontSize: 10,
-    fontWeight: '700',
+  newsTextBlock: {
+    flex: 1,
+  },
+  newsLabel: {
+    color: Colors.accentDim,
+    fontSize: 9,
+    fontWeight: '600',
     letterSpacing: 1.5,
     marginBottom: 4,
   },
-  newsBannerTitle: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
+  newsTitle: {
+    color: Colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '500',
+    lineHeight: 20,
     marginBottom: 4,
   },
-  newsBannerSubtext: {
-    color: '#8a8a9a',
-    fontSize: 12,
+  newsDate: {
+    color: Colors.textDim,
+    fontSize: 11,
+  },
+  newsArrow: {
+    color: Colors.accentDim,
+    fontSize: 22,
+    fontWeight: '300',
   },
 });
 

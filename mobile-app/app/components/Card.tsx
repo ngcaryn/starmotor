@@ -1,26 +1,28 @@
 import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
+import Colors from '../theme/colors';
 
 interface CardProps {
   children: React.ReactNode;
   style?: ViewStyle;
   noPadding?: boolean;
-  glowAccent?: boolean;
+  /** Adds a bright border for the active/selected state */
+  active?: boolean;
 }
 
-// Reusable card container with dark theme and optional neon glow accent
+// Reusable card container with metallic surface styling
 const Card: React.FC<CardProps> = ({
   children,
   style,
   noPadding = false,
-  glowAccent = false,
+  active = false,
 }) => {
   return (
     <View
       style={[
         styles.card,
         noPadding && styles.noPadding,
-        glowAccent && styles.glowAccent,
+        active && styles.activeCard,
         style,
       ]}
     >
@@ -31,28 +33,24 @@ const Card: React.FC<CardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#12121f',
-    borderRadius: 12,
+    backgroundColor: Colors.bgCard,
+    borderRadius: 10,
     padding: 16,
-    marginVertical: 8,
+    marginVertical: 6,
     borderWidth: 1,
-    borderColor: '#1e1e35',
+    borderColor: Colors.border,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
   },
   noPadding: {
     padding: 0,
     overflow: 'hidden',
   },
-  glowAccent: {
-    borderColor: '#00d4ff',
-    shadowColor: '#00d4ff',
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 8,
+  activeCard: {
+    borderColor: Colors.borderActive,
   },
 });
 

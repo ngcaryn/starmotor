@@ -7,6 +7,7 @@ import {
   TextStyle,
   ActivityIndicator,
 } from 'react-native';
+import Colors from '../theme/colors';
 
 interface ButtonProps {
   title: string;
@@ -54,7 +55,7 @@ const Button: React.FC<ButtonProps> = ({
     >
       {loading ? (
         <ActivityIndicator
-          color={variant === 'primary' ? '#0a0a0f' : '#00d4ff'}
+          color={variant === 'primary' ? Colors.bgPrimary : Colors.accent}
           size="small"
         />
       ) : (
@@ -66,22 +67,22 @@ const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: 8,
+    borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
   },
   // Variant styles
   primary: {
-    backgroundColor: '#00d4ff',
+    backgroundColor: Colors.accent,
   },
   secondary: {
-    backgroundColor: '#1e1e35',
+    backgroundColor: Colors.bgElevated,
   },
   outline: {
     backgroundColor: 'transparent',
-    borderWidth: 1.5,
-    borderColor: '#00d4ff',
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   ghost: {
     backgroundColor: 'transparent',
@@ -96,31 +97,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   size_large: {
-    paddingVertical: 16,
+    paddingVertical: 14,
     paddingHorizontal: 32,
   },
   fullWidth: {
     width: '100%',
   },
   disabled: {
-    opacity: 0.5,
+    opacity: 0.45,
   },
   // Text styles
   text: {
-    fontWeight: '700',
-    letterSpacing: 0.5,
+    fontWeight: '600',
+    letterSpacing: 0.4,
   },
   text_primary: {
-    color: '#0a0a0f',
+    color: Colors.bgPrimary,
   },
   text_secondary: {
-    color: '#00d4ff',
+    color: Colors.textPrimary,
   },
   text_outline: {
-    color: '#00d4ff',
+    color: Colors.textSecondary,
   },
   text_ghost: {
-    color: '#8a8a9a',
+    color: Colors.textDim,
   },
   // Text size styles
   textSize_small: {
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   textSize_large: {
-    fontSize: 17,
+    fontSize: 16,
   },
 });
 

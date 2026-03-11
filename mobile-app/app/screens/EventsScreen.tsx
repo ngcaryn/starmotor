@@ -1,327 +1,105 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/store';
-import { setEvents, toggleEventRegistration } from '../store/appSlice';
-import { AppEvent } from '../store/appSlice';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import Card from '../components/Card';
 import Header from '../components/Header';
 import Button from '../components/Button';
+import Colors from '../theme/colors';
 
-const MOCK_EVENTS: AppEvent[] = [
-  {
-    id: 'e1',
-    title: 'StarMotor Launch Summit 2025',
-    description:
-      'Exclusive unveiling of our next-generation electric vehicle lineup. Join us for an immersive brand experience featuring test drives, technology showcases, and networking.',
-    date: '2025-06-15',
-    location: 'Shanghai International Auto Show, China',
-    imageUrl: '',
-    isRegistered: false,
-  },
-  {
-    id: 'e2',
-    title: 'Owner Track Day Experience',
-    description:
-      'An exclusive track day event for StarMotor owners. Push your vehicle to the limit on a professional circuit with coaching from our performance team.',
-    date: '2025-07-20',
-    location: 'Shanghai International Circuit',
-    imageUrl: '',
-    isRegistered: false,
-  },
-  {
-    id: 'e3',
-    title: 'EV Technology Symposium',
-    description:
-      'Deep dive into the future of electric mobility. Featuring keynotes from our engineering team, product demos, and interactive sessions.',
-    date: '2025-08-05',
-    location: 'StarMotor HQ, Beijing',
-    imageUrl: '',
-    isRegistered: true,
-  },
-  {
-    id: 'e4',
-    title: 'Community Drive Weekend',
-    description:
-      "Join hundreds of StarMotor enthusiasts for a scenic coastal drive along China's most beautiful coastline.",
-    date: '2025-09-12',
-    location: 'Coastal Route, Hangzhou',
-    imageUrl: '',
-    isRegistered: false,
-  },
+interface Event {
+  id: string; title: string; date: string; location: string; type: string;
+  description: string; registered: boolean; capacity: number; registered_count: number;
+}
+
+const MOCK_EVENTS: Event[] = [
+  { id: '1', title: 'StarMotor Launch Summit 2025', date: 'Jun 15, 2025', location: 'Shanghai Expo Center', type: 'LAUNCH', description: 'Global launch of the new StarGT Elite and StarSUV Ultra. Exclusive test drives, technical presentations, and brand experiences.', registered: false, capacity: 500, registered_count: 312 },
+  { id: '2', title: 'Test Drive Weekend', date: 'Jul 4–6, 2025', location: 'Multiple Locations', type: 'TEST DRIVE', description: 'Three-day nationwide test drive event. Book your slot and experience the full StarMotor lineup.', registered: true, capacity: 200, registered_count: 200 },
+  { id: '3', title: 'StarMotor Owners Rally', date: 'Aug 10, 2025', location: 'Beijing Ring Road', type: 'COMMUNITY', description: 'Annual owners rally with driving challenges, social events, and exclusive merchandise giveaways.', registered: false, capacity: 150, registered_count: 89 },
+  { id: '4', title: 'EV Technology Forum', date: 'Sep 20, 2025', location: 'Online', type: 'FORUM', description: 'Live-streamed technical forum covering battery innovation, software updates, and future roadmap.', registered: false, capacity: 5000, registered_count: 1420 },
 ];
 
-const EventsScreen: React.FC = () => {
-  const dispatch = useDispatch();
-  const { events } = useSelector((state: RootState) => state.app);
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'registered'>('all');
+const EventsScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const [events, setEvents] = useState(MOCK_EVENTS);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
-  useEffect(() => {
-    if (events.length === 0) {
-      dispatch(setEvents(MOCK_EVENTS));
-    }
-  }, [dispatch, events.length]);
-
-  const displayEvents = events.length > 0 ? events : MOCK_EVENTS;
-  const filtered =
-    selectedFilter === 'registered'
-      ? displayEvents.filter((e) => e.isRegistered)
-      : displayEvents;
-
-  const handleRegister = (event: AppEvent) => {
-    if (event.isRegistered) {
-      Alert.alert(
-        'Cancel Registration',
-        `Cancel registration for "${event.title}"?`,
-        [
-          { text: 'No', style: 'cancel' },
-          {
-            text: 'Yes, Cancel',
-            style: 'destructive',
-            onPress: () => dispatch(toggleEventRegistration(event.id)),
-          },
-        ]
-      );
-    } else {
-      dispatch(toggleEventRegistration(event.id));
-      Alert.alert(
-        'Registered!',
-        `You are registered for "${event.title}". A confirmation email will be sent to you.`
-      );
-    }
+  const handleRegister = (eventId: string) => {
+    setEvents((prev) => prev.map((e) => e.id === eventId ? { ...e, registered: true, registered_count: e.registered_count + 1 } : e));
+    Alert.alert('Registered', 'You have been registered for this event. A confirmation email will be sent.');
+    if (selectedEvent?.id === eventId) setSelectedEvent((prev) => prev ? { ...prev, registered: true } : prev);
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
-
-  const renderEvent = ({ item }: { item: AppEvent }) => (
-    <Card style={styles.eventCard}>
-      {/* Event banner placeholder */}
-      <View style={styles.eventBanner}>
-        <Ionicons name="calendar-outline" size={40} color="#00d4ff" />
-        {item.isRegistered && (
-          <View style={styles.registeredBadge}>
-            <Ionicons name="checkmark-circle" size={14} color="#0a0a0f" />
-            <Text style={styles.registeredBadgeText}>Registered</Text>
-          </View>
-        )}
+  if (selectedEvent) {
+    return (
+      <View style={styles.container}>
+        <Header title="Event Details" showBack onBack={() => setSelectedEvent(null)} />
+        <ScrollView contentContainerStyle={styles.detailContent}>
+          <View style={styles.eventTypeTag}><Text style={styles.eventTypeText}>{selectedEvent.type}</Text></View>
+          <Text style={styles.detailTitle}>{selectedEvent.title}</Text>
+          <Text style={styles.detailDate}>{selectedEvent.date}</Text>
+          <Text style={styles.detailLocation}>{selectedEvent.location}</Text>
+          <Text style={styles.detailDescription}>{selectedEvent.description}</Text>
+          <Card style={styles.capacityCard}>
+            <Text style={styles.capacityLabel}>REGISTRATION</Text>
+            <Text style={styles.capacityValue}>{selectedEvent.registered_count} / {selectedEvent.capacity}</Text>
+          </Card>
+          {selectedEvent.registered ? (
+            <View style={styles.registeredBanner}>
+              <Text style={styles.registeredText}>You are registered for this event</Text>
+            </View>
+          ) : selectedEvent.registered_count >= selectedEvent.capacity ? (
+            <View style={styles.fullBanner}><Text style={styles.fullText}>Event is at full capacity</Text></View>
+          ) : (
+            <Button title="Register Now" onPress={() => handleRegister(selectedEvent.id)} fullWidth size="large" />
+          )}
+        </ScrollView>
       </View>
-
-      <View style={styles.eventInfo}>
-        <Text style={styles.eventTitle}>{item.title}</Text>
-        <Text style={styles.eventDescription} numberOfLines={3}>
-          {item.description}
-        </Text>
-
-        <View style={styles.eventMeta}>
-          <View style={styles.metaRow}>
-            <Ionicons name="calendar" size={14} color="#00d4ff" />
-            <Text style={styles.metaText}>{formatDate(item.date)}</Text>
-          </View>
-          <View style={styles.metaRow}>
-            <Ionicons name="location" size={14} color="#00d4ff" />
-            <Text style={styles.metaText}>{item.location}</Text>
-          </View>
-        </View>
-
-        <Button
-          title={item.isRegistered ? 'Cancel Registration' : 'Register Now'}
-          onPress={() => handleRegister(item)}
-          variant={item.isRegistered ? 'outline' : 'primary'}
-          fullWidth
-          size="medium"
-          style={styles.registerButton}
-        />
-      </View>
-    </Card>
-  );
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <Header title="Events" subtitle="Brand experiences & activities" />
-
-      {/* Filter tabs */}
-      <View style={styles.filterRow}>
-        <TouchableOpacity
-          style={[styles.filterTab, selectedFilter === 'all' && styles.filterTabActive]}
-          onPress={() => setSelectedFilter('all')}
-        >
-          <Text
-            style={[
-              styles.filterTabText,
-              selectedFilter === 'all' && styles.filterTabTextActive,
-            ]}
-          >
-            All Events ({displayEvents.length})
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.filterTab,
-            selectedFilter === 'registered' && styles.filterTabActive,
-          ]}
-          onPress={() => setSelectedFilter('registered')}
-        >
-          <Text
-            style={[
-              styles.filterTabText,
-              selectedFilter === 'registered' && styles.filterTabTextActive,
-            ]}
-          >
-            My Events ({displayEvents.filter((e) => e.isRegistered).length})
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {filtered.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Ionicons name="calendar-outline" size={64} color="#2a2a3e" />
-          <Text style={styles.emptyTitle}>No events found</Text>
-          <Text style={styles.emptySubtext}>
-            {selectedFilter === 'registered'
-              ? 'Register for events to see them here'
-              : 'Check back soon for upcoming events'}
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={filtered}
-          keyExtractor={(item) => item.id}
-          renderItem={renderEvent}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
+      <Header title="Events" subtitle="Upcoming activities" />
+      <FlatList
+        data={events} keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity style={styles.eventCard} onPress={() => setSelectedEvent(item)}>
+            <View style={styles.eventCardInner}>
+              <View style={styles.eventTypeTag}><Text style={styles.eventTypeText}>{item.type}</Text></View>
+              <Text style={styles.eventTitle}>{item.title}</Text>
+              <Text style={styles.eventMeta}>{item.date}  ·  {item.location}</Text>
+              {item.registered && <Text style={styles.registeredBadge}>Registered</Text>}
+            </View>
+            <Text style={styles.arrowText}>›</Text>
+          </TouchableOpacity>
+        )}
+        contentContainerStyle={styles.listContent} showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0a0a0f',
-  },
-  filterRow: {
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    gap: 10,
-  },
-  filterTab: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    backgroundColor: '#12121f',
-    borderWidth: 1,
-    borderColor: '#1e1e35',
-  },
-  filterTabActive: {
-    backgroundColor: '#001f2e',
-    borderColor: '#00d4ff',
-  },
-  filterTabText: {
-    color: '#6a6a7a',
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  filterTabTextActive: {
-    color: '#00d4ff',
-  },
-  listContent: {
-    padding: 16,
-  },
-  eventCard: {
-    padding: 0,
-    overflow: 'hidden',
-    marginBottom: 16,
-  },
-  eventBanner: {
-    height: 120,
-    backgroundColor: '#0d1a2e',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  registeredBadge: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: '#00d4ff',
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  registeredBadgeText: {
-    color: '#0a0a0f',
-    fontSize: 11,
-    fontWeight: '700',
-  },
-  eventInfo: {
-    padding: 16,
-  },
-  eventTitle: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 8,
-  },
-  eventDescription: {
-    color: '#6a6a7a',
-    fontSize: 13,
-    lineHeight: 19,
-    marginBottom: 12,
-  },
-  eventMeta: {
-    gap: 6,
-    marginBottom: 16,
-  },
-  metaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  metaText: {
-    color: '#8a8a9a',
-    fontSize: 13,
-  },
-  registerButton: {},
-  emptyState: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 40,
-  },
-  emptyTitle: {
-    color: '#ffffff',
-    fontSize: 20,
-    fontWeight: '700',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptySubtext: {
-    color: '#4a4a5a',
-    fontSize: 14,
-    textAlign: 'center',
-  },
+  container: { flex: 1, backgroundColor: Colors.bgPrimary },
+  listContent: { padding: 16 },
+  eventCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.bgCard, borderRadius: 8, borderWidth: 1, borderColor: Colors.border, padding: 14, marginBottom: 8 },
+  eventCardInner: { flex: 1 },
+  eventTypeTag: { alignSelf: 'flex-start', backgroundColor: Colors.bgInset, borderRadius: 3, paddingHorizontal: 8, paddingVertical: 3, marginBottom: 6, borderWidth: 1, borderColor: Colors.borderDark },
+  eventTypeText: { color: Colors.accentDim, fontSize: 9, fontWeight: '600', letterSpacing: 1.5 },
+  eventTitle: { color: Colors.textPrimary, fontSize: 15, fontWeight: '600', marginBottom: 4 },
+  eventMeta: { color: Colors.textSecondary, fontSize: 12 },
+  registeredBadge: { color: Colors.success, fontSize: 11, fontWeight: '600', marginTop: 6 },
+  arrowText: { color: Colors.accentDim, fontSize: 22, fontWeight: '300', paddingLeft: 8 },
+  detailContent: { padding: 20 },
+  detailTitle: { color: Colors.textPrimary, fontSize: 22, fontWeight: '600', marginBottom: 8, marginTop: 8 },
+  detailDate: { color: Colors.accent, fontSize: 14, fontWeight: '500', marginBottom: 4 },
+  detailLocation: { color: Colors.textSecondary, fontSize: 13, marginBottom: 16 },
+  detailDescription: { color: Colors.textSecondary, fontSize: 14, lineHeight: 22, marginBottom: 20 },
+  capacityCard: { marginBottom: 20 },
+  capacityLabel: { color: Colors.textDim, fontSize: 10, fontWeight: '600', letterSpacing: 1.5, marginBottom: 6 },
+  capacityValue: { color: Colors.textPrimary, fontSize: 22, fontWeight: '600' },
+  registeredBanner: { backgroundColor: 'rgba(74,124,94,0.12)', borderRadius: 6, padding: 14, borderWidth: 1, borderColor: Colors.success },
+  registeredText: { color: Colors.success, fontSize: 14, fontWeight: '500', textAlign: 'center' },
+  fullBanner: { backgroundColor: Colors.bgElevated, borderRadius: 6, padding: 14, borderWidth: 1, borderColor: Colors.border },
+  fullText: { color: Colors.textSecondary, fontSize: 14, textAlign: 'center' },
 });
 
 export default EventsScreen;
