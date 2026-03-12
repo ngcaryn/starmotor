@@ -110,10 +110,10 @@ A production-ready cross-platform automotive mobile application built with React
 ## 🚀 Installation & Setup
 
 ### Prerequisites
-- Node.js 18+
+- [Node.js 18+](https://nodejs.org/)
 - npm or yarn
-- Expo CLI (`npm install -g expo-cli`)
-- iOS Simulator (macOS) or Android Emulator
+- [Expo Go](https://expo.dev/go) app installed on your iOS or Android device (for physical-device testing)
+- iOS Simulator (macOS only) or Android Emulator (optional)
 
 ### Step 1: Navigate to the app directory
 ```bash
@@ -128,9 +128,17 @@ npm install
 ### Step 3: Start the development server
 ```bash
 npm start
+# or equivalently:
+npx expo start
 ```
 
 ### Step 4: Run on a device/emulator
+
+**Expo Go (physical device — recommended for quick testing):**
+- Install [Expo Go](https://expo.dev/go) on your iOS or Android device
+- A QR code appears in the terminal after `npm start`
+- **Android:** Open the Expo Go app → tap **Scan QR Code** → scan the QR code
+- **iOS:** Open the built-in **Camera** app → scan the QR code → tap the Expo Go banner
 
 **iOS Simulator (macOS only):**
 ```bash
@@ -142,9 +150,75 @@ npm run ios
 npm run android
 ```
 
-**Expo Go (physical device):**
-- Install [Expo Go](https://expo.dev/go) on your device
-- Scan the QR code displayed in the terminal
+---
+
+## 💻 Running via VS Code Terminal
+
+VS Code's integrated terminal is the fastest way to start the dev server and preview the app on a physical device with Expo Go.
+
+### Steps
+
+1. Open the `starmotor` project folder in VS Code.
+
+2. Open the integrated terminal:
+   - **Windows / Linux:** `Ctrl` + `` ` `` (backtick key)
+   - **macOS:** `Cmd` + `` ` `` (backtick key)
+   - Or go to **Terminal → New Terminal** in the menu bar.
+
+3. Navigate to the mobile app:
+   ```bash
+   cd mobile-app
+   ```
+
+4. Install dependencies (first run only):
+   ```bash
+   npm install
+   ```
+
+5. Start the Expo dev server:
+   ```bash
+   npx expo start
+   ```
+   The VS Code terminal will show a QR code and an interactive menu:
+   ```
+   › Metro waiting on exp://192.168.x.x:8081
+   › Scan the QR code above with Expo Go (Android) or the Camera app (iOS)
+
+   › Press a │ open Android
+   › Press i │ open iOS simulator
+   › Press w │ open web
+
+   › Press r │ reload app
+   › Press m │ toggle menu
+   › Press ? │ show all commands
+   ```
+
+6. **Choose how to open the app — pick one:**
+
+   | What you want | What to do |
+   |---|---|
+   | Physical Android device | Open **Expo Go** → tap **Scan QR Code** → scan the QR in the terminal |
+   | Physical iOS device | Open the **Camera** app → scan the QR code → tap the **Expo Go** banner |
+   | Android emulator (running) | Press **`a`** in the terminal |
+   | iOS simulator (macOS only) | Press **`i`** in the terminal |
+   | Web browser | Press **`w`** in the terminal |
+
+> **Different network?** If your phone and computer are on different Wi-Fi networks, use tunnel mode:
+> ```bash
+> npx expo start --tunnel
+> ```
+
+> **App not updating?** Press **`r`** in the terminal to reload, or shake your device and tap **Reload**.
+
+### Quick-reference commands
+
+| Goal | Command |
+|------|---------|
+| Start dev server (default) | `npx expo start` |
+| Start with tunnel (cross-network) | `npx expo start --tunnel` |
+| Open in Android emulator | `npx expo start --android` |
+| Open in iOS simulator | `npx expo start --ios` |
+| Open in web browser | `npx expo start --web` |
 
 ---
 
