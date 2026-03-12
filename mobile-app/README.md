@@ -179,16 +179,36 @@ VS Code's integrated terminal is the fastest way to start the dev server and pre
    ```bash
    npx expo start
    ```
-   A QR code will render directly in the VS Code terminal.
+   The VS Code terminal will show a QR code and an interactive menu:
+   ```
+   › Metro waiting on exp://192.168.x.x:8081
+   › Scan the QR code above with Expo Go (Android) or the Camera app (iOS)
 
-6. On your phone:
-   - **Android** – Open Expo Go → **Scan QR Code**
-   - **iOS** – Open Camera → scan the QR code → tap the Expo Go prompt
+   › Press a │ open Android
+   › Press i │ open iOS simulator
+   › Press w │ open web
+
+   › Press r │ reload app
+   › Press m │ toggle menu
+   › Press ? │ show all commands
+   ```
+
+6. **Choose how to open the app — pick one:**
+
+   | What you want | What to do |
+   |---|---|
+   | Physical Android device | Open **Expo Go** → tap **Scan QR Code** → scan the QR in the terminal |
+   | Physical iOS device | Open the **Camera** app → scan the QR code → tap the **Expo Go** banner |
+   | Android emulator (running) | Press **`a`** in the terminal |
+   | iOS simulator (macOS only) | Press **`i`** in the terminal |
+   | Web browser | Press **`w`** in the terminal |
 
 > **Different network?** If your phone and computer are on different Wi-Fi networks, use tunnel mode:
 > ```bash
 > npx expo start --tunnel
 > ```
+
+> **App not updating?** Press **`r`** in the terminal to reload, or shake your device and tap **Reload**.
 
 ### Quick-reference commands
 

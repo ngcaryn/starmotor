@@ -58,16 +58,36 @@ The full React Native source lives in `mobile-app/`. The quickest way to run the
    ```bash
    npx expo start
    ```
-   A QR code will appear directly in the VS Code terminal.
+   The VS Code terminal will display a QR code and an interactive menu like this:
+   ```
+   › Metro waiting on exp://192.168.x.x:8081
+   › Scan the QR code above with Expo Go (Android) or the Camera app (iOS)
 
-5. **Open in Expo Go:**
-   - **Android:** Open the Expo Go app and tap **"Scan QR Code"**, then point your camera at the QR code in the terminal.
-   - **iOS:** Open the default **Camera** app and scan the QR code — tap the Expo Go banner that appears.
+   › Press a │ open Android
+   › Press i │ open iOS simulator
+   › Press w │ open web
+
+   › Press r │ reload app
+   › Press m │ toggle menu
+   › Press ? │ show all commands
+   ```
+
+5. **Choose how to open the app — pick one:**
+
+   | What you want | What to do |
+   |---|---|
+   | Physical Android device | Open **Expo Go** → tap **Scan QR Code** → scan the QR in the terminal |
+   | Physical iOS device | Open the **Camera** app → scan the QR code → tap the **Expo Go** banner |
+   | Android emulator (running) | Press **`a`** in the terminal |
+   | iOS simulator (macOS only) | Press **`i`** in the terminal |
+   | Web browser | Press **`w`** in the terminal |
 
 > **Tip – on a different Wi-Fi network?** If your computer and phone are on separate networks, start with tunnel mode instead:
 > ```bash
 > npx expo start --tunnel
 > ```
+
+> **Tip – app not updating?** Press **`r`** in the terminal to reload, or shake your device and tap **Reload**.
 
 ### Other launch options
 
