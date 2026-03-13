@@ -1,108 +1,108 @@
-# ★ Starmotor
+# 星驰汽车 (StarMotor)
 
-> A comprehensive automotive lifestyle mobile app built with React Native (Expo) and TypeScript.
+A comprehensive Flutter starter project for **Starmotor** — a Chinese automotive lifestyle mobile app inspired by platforms like Li Auto, featuring 7 core feature tabs.
 
----
+## Features
 
-## View the App (Browser Preview)
-
-Open the self-contained interactive preview in your browser — **no toolchain required**:
-
-| Platform | Command |
-|----------|---------|
-| **macOS** | `open preview/index.html` |
-| **Windows** | `start preview\index.html` |
-| **Linux** | `xdg-open preview/index.html` |
-
-Or simply double-click `preview/index.html` in your file manager / IDE.
-
-The preview includes all **8 screens** rendered inside a phone-chrome frame with a working bottom navigation bar:
-
-- **Login** — email / password sign-in with JWT authentication
-- **Dashboard** — personalised home feed and quick-access tiles
-- **Vehicles** — showroom, filterable catalogue, full spec viewer, inquiry form
-- **Store** — accessories & merchandise with cart and checkout flow
-- **Events** — upcoming brand events with registration
-- **Community** — forum feed with likes, comments, and category filters
-- **Rewards** — daily check-in, points balance, and redemption catalogue
-- **Service** — AI chatbot (STAR AI), FAQ, and support tickets
-- **Profile** — user stats, linked vehicles, order history, settings
-
----
-
-## 📱 Run on Expo Go (VS Code Terminal)
-
-The full React Native source lives in `mobile-app/`. The quickest way to run the app on a **physical device** is via [Expo Go](https://expo.dev/go).
-
-### Prerequisites
-- [Node.js 18+](https://nodejs.org/)
-- [Expo Go](https://expo.dev/go) installed on your iOS or Android device
-
-### Steps
-
-1. **Open the project in VS Code** and launch the integrated terminal:
-   - **Windows / Linux:** `Ctrl` + `` ` `` (backtick key)
-   - **macOS:** `Cmd` + `` ` `` (backtick key)
-
-2. **Navigate to the mobile app directory:**
-   ```bash
-   cd mobile-app
-   ```
-
-3. **Install dependencies** (first time only):
-   ```bash
-   npm install
-   ```
-
-4. **Start the Expo development server:**
-   ```bash
-   npx expo start
-   ```
-   The VS Code terminal will display a QR code and an interactive menu like this:
-   ```
-   › Metro waiting on exp://192.168.x.x:8081
-   › Scan the QR code above with Expo Go (Android) or the Camera app (iOS)
-
-   › Press a │ open Android
-   › Press i │ open iOS simulator
-   › Press w │ open web
-
-   › Press r │ reload app
-   › Press m │ toggle menu
-   › Press ? │ show all commands
-   ```
-
-5. **Choose how to open the app — pick one:**
-
-   | What you want | What to do |
-   |---|---|
-   | Physical Android device | Open **Expo Go** → tap **Scan QR Code** → scan the QR in the terminal |
-   | Physical iOS device | Open the **Camera** app → scan the QR code → tap the **Expo Go** banner |
-   | Android emulator (running) | Press **`a`** in the terminal |
-   | iOS simulator (macOS only) | Press **`i`** in the terminal |
-   | Web browser | Press **`w`** in the terminal |
-
-> **Tip – on a different Wi-Fi network?** If your computer and phone are on separate networks, start with tunnel mode instead:
-> ```bash
-> npx expo start --tunnel
-> ```
-
-> **Tip – app not updating?** Press **`r`** in the terminal to reload, or shake your device and tap **Reload**.
-
-### Other launch options
-
-| Target | Command |
-|--------|---------|
-| Expo Go (default) | `npx expo start` |
-| Expo Go via tunnel | `npx expo start --tunnel` |
-| Android emulator | `npx expo start --android` |
-| iOS simulator (macOS) | `npx expo start --ios` |
-| Web browser | `npx expo start --web` |
-
----
+| Tab | Description |
+|-----|-------------|
+| 🏘️ 社区 (Social) | User-generated posts with image grids, likes, comments, and hashtags |
+| 📰 资讯 (Publication) | Tabbed news & events feed from the brand |
+| 🚗 购车 (Purchase) | Car catalog → detail (specs/colors/variants) → step-by-step configurator → order |
+| 🔭 探索 (Explore) | Brand story, milestones timeline, events list, showroom locator |
+| 🛍️ 商城 (Mall) | Category strip + product grid with live cart badge counter |
+| 🔧 服务 (Service) | Service card grid, 3-step booking stepper, FAQ expansion tiles, warranty sheet |
+| 👤 我的 (Profile) | Sliver app bar, follow stats, order history, settings |
 
 ## Tech Stack
 
+- **Flutter** (cross-platform, Material 3)
+- **Riverpod** (`StateNotifier` / `AsyncNotifier`) — state management
+- **HTTP** — API client with auto Bearer-token injection
+- **shared_preferences** — local token & user data storage
+- **cached_network_image** — efficient image loading
+- **intl** — internationalisation utilities
+
+## Project Structure
+
+```
+lib/
+├── main.dart                    # App entry point, auth-driven navigation
+├── config/
+│   ├── app_config.dart          # Feature flags & pagination settings
+│   ├── api_config.dart          # All API endpoint constants
+│   └── theme_config.dart        # Material 3 light + dark themes
+├── models/                      # Data models with fromJson/toJson
+│   ├── user_model.dart
+│   ├── post_model.dart
+│   ├── car_model.dart
+│   ├── product_model.dart
+│   ├── order_model.dart
+│   └── service_model.dart
+├── services/
+│   ├── api_service.dart         # Singleton HTTP client
+│   ├── auth_service.dart        # Auth flows (mock → real API hookpoints)
+│   ├── storage_service.dart     # SharedPreferences wrapper
+│   └── notification_service.dart# FCM skeleton
+├── providers/                   # Riverpod providers
+│   ├── auth_provider.dart
+│   ├── social_provider.dart
+│   ├── purchase_provider.dart
+│   ├── mall_provider.dart
+│   └── user_provider.dart
+├── screens/                     # All 7 tabs + auth
+│   ├── auth/
+│   ├── social/
+│   ├── publication/
+│   ├── purchase/
+│   ├── explore/
+│   ├── mall/
+│   ├── service/
+│   ├── profile/
+│   └── home/
+├── widgets/
+│   ├── post_card.dart
+│   ├── car_card.dart
+│   ├── product_card.dart
+│   └── custom_app_bar.dart
+└── utils/
+    ├── constants.dart           # Routes, error/success strings, provinces
+    └── validators.dart          # Phone (CN), email, password, OTP, nickname
+```
+
+## Getting Started
+
+### Prerequisites
+
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) ≥ 3.0.0
+- Dart ≥ 3.0.0
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/ngcaryn/starmotor.git
+cd starmotor
+
+# Install dependencies
+flutter pub get
+
+# Run on a connected device or emulator
+flutter run
+```
+
+### Running Tests
+
+```bash
+flutter test
+```
+
+## Architecture Notes
+
+- **Auth-driven navigation**: Splash → Login or `MainNavigation` based on `authNotifierProvider` state
+- **Mock data**: All providers ship with realistic mock data; swap `await Future.delayed(...)` stubs for real `ApiService` calls
+- **Cart badge**: Live counter on the Mall tab uses `cartItemCountProvider`
+- **Theme**: Fully supports light and dark mode via `ThemeMode.system`
 | Layer | Technology |
 |-------|-----------|
 | Framework | React Native (Expo ~51) |
