@@ -103,3 +103,12 @@ flutter test
 - **Mock data**: All providers ship with realistic mock data; swap `await Future.delayed(...)` stubs for real `ApiService` calls
 - **Cart badge**: Live counter on the Mall tab uses `cartItemCountProvider`
 - **Theme**: Fully supports light and dark mode via `ThemeMode.system`
+| Layer | Technology |
+|-------|-----------|
+| Framework | React Native (Expo ~51) |
+| Language | TypeScript |
+| Navigation | React Navigation 6 |
+| State management | Redux Toolkit |
+| API client | Axios |
+| Local storage | AsyncStorage |
+| UI components | React Native Paper + Custom |
