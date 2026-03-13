@@ -25,6 +25,15 @@ const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleGuestBrowse = () => {
+    dispatch(
+      loginSuccess({
+        user: { id: 'guest', name: 'Guest', email: 'guest@starmotor.com' },
+        token: 'guest',
+      })
+    );
+  };
+
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
       Alert.alert('Validation Error', 'Please enter your email and password.');
@@ -139,7 +148,7 @@ const LoginScreen: React.FC = () => {
           {/* Guest browse option */}
           <Button
             title="Browse as Guest"
-            onPress={() => {}}
+            onPress={handleGuestBrowse}
             variant="outline"
             fullWidth
             size="large"
