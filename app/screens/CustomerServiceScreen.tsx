@@ -26,8 +26,8 @@ const BOT_RESPONSES = [
     keywords: ['delivery'],
   },
   {
-    text: "For a left-hand-drive overseas rollout, the highest-potential starter markets are usually Norway, the Netherlands, Germany, Sweden, Denmark, France, Spain, Portugal, Belgium, Switzerland, Austria, Israel, the UAE, Chile, Uruguay, Costa Rica, Thailand, and Vietnam. These markets combine left-hand-drive compatibility with relatively strong EV demand, growing charging networks, and consumer openness to competitively priced electric SUVs.\n\nWhen selecting launch countries, focus on seven filters: 1) left-hand-drive and homologation fit, 2) EV incentives and import-duty structure, 3) charging-standard compatibility and infrastructure density, 4) demand for C-segment electric SUVs, 5) acceptance of Chinese/new-energy brands, 6) local distributor, service, and parts readiness, and 7) pricing competitiveness after tax, logistics, and warranty costs.\n\nA practical first wave would usually be Northern and Western Europe plus a few high-income Middle East and Latin American markets, then expand once aftersales support and brand awareness are proven.",
-    keywords: ['overseas', 'left hand drive', 'left-hand-drive', 'lhd', 'country', 'countries', 'market', 'markets', 'criteria'],
+    text: "For a left-hand-drive rollout, the strongest starter markets are usually Norway, the Netherlands, Germany, Sweden, Denmark, France, Spain, Portugal, Belgium, Switzerland, Austria, Israel, the UAE, Chile, Uruguay, Costa Rica, Thailand, and Vietnam. Prioritize countries with good EV incentives, dense charging networks, strong compact-electric-SUV demand, competitive landed pricing, and ready local distributor and service coverage.",
+    keywords: ['overseas', 'left hand drive', 'lhd', 'country', 'countries', 'market', 'markets', 'criteria'],
   },
 ];
 
@@ -51,7 +51,7 @@ const CustomerServiceScreen: React.FC<{ navigation: any }> = ({ navigation }) =>
   const [ticketBody, setTicketBody] = useState('');
 
   const getBotResponse = (message: string) => {
-    const normalizedMessage = message.toLowerCase();
+    const normalizedMessage = message.toLowerCase().replace(/-/g, ' ');
     return BOT_RESPONSES.find(({ keywords }) => keywords.some((keyword) => normalizedMessage.includes(keyword)))?.text ?? DEFAULT_BOT_RESPONSE;
   };
 
