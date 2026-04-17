@@ -36,7 +36,7 @@ const FAQ = [
   { id: 'f2', question: 'How do I book a service?', key: 'service' },
   { id: 'f3', question: 'What charging standards are supported?', key: 'charging' },
   { id: 'f4', question: 'When will my vehicle be delivered?', key: 'delivery' },
-  { id: 'f5', question: 'Which left-hand-drive overseas markets should Arcfox Alpha T5 prioritize, and what selection criteria matter most?', key: 'overseas' },
+  { id: 'f5', question: 'Which left-hand-drive overseas markets should ArcFox Alpha T5 prioritize, and what selection criteria matter most?', key: 'overseas' },
 ];
 
 const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
