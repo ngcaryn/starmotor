@@ -6,19 +6,37 @@ import Colors from '../theme/colors';
 
 interface Message { id: string; from: 'user' | 'bot'; text: string; time: string; }
 
-const BOT_RESPONSES: Record<string, string> = {
-  default: "Thank you for reaching out. A support agent will respond within 2 hours. For urgent issues, call +86 400-STAR-001.",
-  warranty: "StarMotor vehicles are covered by an 8-year/160,000 km battery warranty and a 4-year/80,000 km comprehensive warranty.",
-  service: "You can book a service appointment via the app under Profile → Service Appointments, or call your nearest service center.",
-  charging: "StarMotor supports CCS2, CHAdeMO, and Type 2 charging. DC fast charging (250 kW) takes approximately 18 minutes for 80%.",
-  delivery: "Standard delivery takes 4–8 weeks from order confirmation. You can track your order status under Profile → My Orders.",
-};
+const DEFAULT_BOT_RESPONSE = "Thank you for reaching out. A support agent will respond within 2 hours. For urgent issues, call +86 400-STAR-001.";
+
+const BOT_RESPONSES = [
+  {
+    text: "StarMotor vehicles are covered by an 8-year/160,000 km battery warranty and a 4-year/80,000 km comprehensive warranty.",
+    keywords: ['warranty'],
+  },
+  {
+    text: "You can book a service appointment via the app under Profile → Service Appointments, or call your nearest service center.",
+    keywords: ['service'],
+  },
+  {
+    text: "StarMotor supports CCS2, CHAdeMO, and Type 2 charging. DC fast charging (250 kW) takes approximately 18 minutes for 80%.",
+    keywords: ['charging'],
+  },
+  {
+    text: "Standard delivery takes 4–8 weeks from order confirmation. You can track your order status under Profile → My Orders.",
+    keywords: ['delivery'],
+  },
+  {
+    text: "For a left-hand-drive overseas rollout, the highest-potential starter markets are usually Norway, the Netherlands, Germany, Sweden, Denmark, France, Spain, Portugal, Belgium, Switzerland, Austria, Israel, the UAE, Chile, Uruguay, Costa Rica, Thailand, and Vietnam. These markets combine left-hand-drive compatibility with relatively strong EV demand, growing charging networks, and consumer openness to competitively priced electric SUVs.\n\nWhen selecting launch countries, focus on seven filters: 1) left-hand-drive and homologation fit, 2) EV incentives and import-duty structure, 3) charging-standard compatibility and infrastructure density, 4) demand for C-segment electric SUVs, 5) acceptance of Chinese/new-energy brands, 6) local distributor, service, and parts readiness, and 7) pricing competitiveness after tax, logistics, and warranty costs.\n\nA practical first wave would usually be Northern and Western Europe plus a few high-income Middle East and Latin American markets, then expand once aftersales support and brand awareness are proven.",
+    keywords: ['overseas', 'left hand drive', 'left-hand-drive', 'lhd', 'country', 'countries', 'market', 'markets', 'criteria'],
+  },
+];
 
 const FAQ = [
   { id: 'f1', question: 'What is the warranty coverage?', key: 'warranty' },
   { id: 'f2', question: 'How do I book a service?', key: 'service' },
   { id: 'f3', question: 'What charging standards are supported?', key: 'charging' },
   { id: 'f4', question: 'When will my vehicle be delivered?', key: 'delivery' },
+  { id: 'f5', question: 'Which left-hand-drive overseas markets should Arcfox Alpha T5 prioritize, and what selection criteria matter most?', key: 'overseas' },
 ];
 
 const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -32,12 +50,16 @@ const CustomerServiceScreen: React.FC<{ navigation: any }> = ({ navigation }) =>
   const [ticketSubject, setTicketSubject] = useState('');
   const [ticketBody, setTicketBody] = useState('');
 
+  const getBotResponse = (message: string) => {
+    const normalizedMessage = message.toLowerCase();
+    return BOT_RESPONSES.find(({ keywords }) => keywords.some((keyword) => normalizedMessage.includes(keyword)))?.text ?? DEFAULT_BOT_RESPONSE;
+  };
+
   const sendMessage = (text?: string) => {
     const msg = (text ?? input).trim();
     if (!msg) return;
     const userMsg: Message = { id: Date.now().toString(), from: 'user', text: msg, time: now() };
-    const keyword = Object.keys(BOT_RESPONSES).find((k) => msg.toLowerCase().includes(k)) ?? 'default';
-    const botMsg: Message = { id: (Date.now() + 1).toString(), from: 'bot', text: BOT_RESPONSES[keyword], time: now() };
+    const botMsg: Message = { id: (Date.now() + 1).toString(), from: 'bot', text: getBotResponse(msg), time: now() };
     setMessages((prev) => [...prev, userMsg, botMsg]);
     setInput('');
   };
