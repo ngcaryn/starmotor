@@ -36,10 +36,11 @@ const FAQ = [
   { id: 'f2', question: 'How do I book a service?' },
   { id: 'f3', question: 'What charging standards are supported?' },
   { id: 'f4', question: 'When will my vehicle be delivered?' },
-  { id: 'f5', question: 'Which left-hand-drive overseas markets should ArcFox Alpha T5 prioritize, and what selection criteria matter most?' },
+  { id: 'f5', question: 'Which overseas markets should we prioritize for ArcFox Alpha T5?' },
 ];
 
 const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const CustomerServiceScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [tab, setTab] = useState<'chat' | 'faq' | 'ticket'>('chat');
@@ -53,7 +54,9 @@ const CustomerServiceScreen: React.FC<{ navigation: any }> = ({ navigation }) =>
   const getBotResponse = (message: string) => {
     // Normalize hyphenated phrases so both "left-hand-drive" and "left hand drive" match the same keyword.
     const normalizedMessage = message.toLowerCase().replace(/-/g, ' ');
-    return BOT_RESPONSES.find(({ keywords }) => keywords.some((keyword) => normalizedMessage.includes(keyword)))?.text ?? DEFAULT_BOT_RESPONSE;
+    return BOT_RESPONSES.find(({ keywords }) =>
+      keywords.some((keyword) => new RegExp(`\\b${escapeRegExp(keyword)}\\b`, 'i').test(normalizedMessage))
+    )?.text ?? DEFAULT_BOT_RESPONSE;
   };
 
   const sendMessage = (text?: string) => {
