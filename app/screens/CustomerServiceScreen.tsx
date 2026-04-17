@@ -32,11 +32,11 @@ const BOT_RESPONSES = [
 ];
 
 const FAQ = [
-  { id: 'f1', question: 'What is the warranty coverage?', key: 'warranty' },
-  { id: 'f2', question: 'How do I book a service?', key: 'service' },
-  { id: 'f3', question: 'What charging standards are supported?', key: 'charging' },
-  { id: 'f4', question: 'When will my vehicle be delivered?', key: 'delivery' },
-  { id: 'f5', question: 'Which left-hand-drive overseas markets should ArcFox Alpha T5 prioritize, and what selection criteria matter most?', key: 'overseas' },
+  { id: 'f1', question: 'What is the warranty coverage?' },
+  { id: 'f2', question: 'How do I book a service?' },
+  { id: 'f3', question: 'What charging standards are supported?' },
+  { id: 'f4', question: 'When will my vehicle be delivered?' },
+  { id: 'f5', question: 'Which left-hand-drive overseas markets should ArcFox Alpha T5 prioritize, and what selection criteria matter most?' },
 ];
 
 const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -51,6 +51,7 @@ const CustomerServiceScreen: React.FC<{ navigation: any }> = ({ navigation }) =>
   const [ticketBody, setTicketBody] = useState('');
 
   const getBotResponse = (message: string) => {
+    // Normalize hyphenated phrases so both "left-hand-drive" and "left hand drive" match the same keyword.
     const normalizedMessage = message.toLowerCase().replace(/-/g, ' ');
     return BOT_RESPONSES.find(({ keywords }) => keywords.some((keyword) => normalizedMessage.includes(keyword)))?.text ?? DEFAULT_BOT_RESPONSE;
   };
